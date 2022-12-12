@@ -116,8 +116,8 @@ int main() {
     shader.setUniform4f("u_color", 0.0, 0.2, 0.5, 0.0);
     // shader.setUniformMat4f("u_MVP", mvp);
 
-    Texture texture_rl("../../../assets/Chess_rlt45.svg.png");                          //https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
-    Texture texture_qd("../../../assets/Chess_qdt45.svg.png");
+    Texture texture_rl("../assets/Chess_rlt45.svg.png");                          //https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+    Texture texture_qd("../assets/Chess_qdt45.svg.png");
     texture_qd.bind();
     shader.setUniform1i("u_texture", 0); 
     //If we have multiple vertex buffer objects and layouts to be bind within the loop, then:
