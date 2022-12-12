@@ -1,9 +1,9 @@
-#include "src/renderer.hpp"                                         // Load glew before everything (via renderer)
-#include "src/vertex_buffer.hpp"
-#include "src/index_buffer.hpp"
-#include "src/vertex_array.hpp"
-#include "src/shader.hpp"
-#include "src/texture.hpp"
+#include "src/graphics/renderer.hpp"                                         // Load glew before everything (via renderer)
+#include "src/graphics/vertex_buffer.hpp"
+#include "src/graphics/index_buffer.hpp"
+#include "src/graphics/vertex_array.hpp"
+#include "src/graphics/shader.hpp"
+#include "src/graphics/texture.hpp"
 
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"

@@ -22,13 +22,13 @@ endif()
 
 include_directories( vendor/include vendor/include/imgui/ ${OPENGL_INCLUDE_DIRS}  ${glfw3_INCLUDE_DIRS})                                 # ${GLEW_INCLUDE_DIRS}
 target_sources(opengl-chess PRIVATE main.cpp 
-    src/renderer.cpp
-    src/vertex_buffer.cpp
-    src/index_buffer.cpp
-    src/vertex_array.cpp
-    src/vertex_buffer_layout.cpp
-    src/shader.cpp
-    src/texture.cpp
+    src/graphics/renderer.cpp
+    src/graphics/vertex_buffer.cpp
+    src/graphics/index_buffer.cpp
+    src/graphics/vertex_array.cpp
+    src/graphics/vertex_buffer_layout.cpp
+    src/graphics/shader.cpp
+    src/graphics/texture.cpp
 
     vendor/src/ZR/core.cpp
     vendor/include/imgui/imgui.cpp
