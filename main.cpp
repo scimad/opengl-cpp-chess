@@ -1,9 +1,11 @@
-#include "src/graphics/renderer.hpp"                                         // Load glew before everything (via renderer)
-#include "src/graphics/vertex_buffer.hpp"
-#include "src/graphics/index_buffer.hpp"
-#include "src/graphics/vertex_array.hpp"
-#include "src/graphics/shader.hpp"
-#include "src/graphics/texture.hpp"
+#include "graphics/renderer.hpp"                                         // Load glew before everything (via renderer)
+#include "graphics/vertex_buffer.hpp"
+#include "graphics/index_buffer.hpp"
+#include "graphics/vertex_array.hpp"
+#include "graphics/shader.hpp"
+#include "graphics/texture.hpp"
+#include "graphics/utils.hpp"
+
 
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -13,23 +15,11 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-#include <ZR/core.hpp>
+#include "ZR/core.hpp"
 
 #include <signal.h>
 #include <string>
 
-
-static void GLunbindShaderVertexIndexBuffer(){
-    GLCALL(glBindVertexArray(0));
-    GLCALL(glUseProgram(0));
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-};
-
-void processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-}
 
 int main() {
     zr::log_level = zr::VERBOSITY_LEVEL::DEBUG;
@@ -183,9 +173,9 @@ int main() {
             shader.setUniform4f("u_color", r, 0, 0, 0.0); //if uniform is not used in shader, it gives error / notification
             renderer.draw(va, ib, shader, texture_rl);
         }
-        // if (show_demo_window){
-        //     ImGui::ShowDemoWindow(&show_demo_window);
-        // }
+        if (show_demo_window){
+            ImGui::ShowDemoWindow(&show_demo_window);
+        }
 
         {
             static float f = 0.0f;
@@ -210,14 +200,14 @@ int main() {
             ImGui::End();
         }
 
-        // // Show another simple window.
-        // if (show_another_window){
-        //     ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        //     ImGui::Text("Hello from another window!");
-        //     if (ImGui::Button("Close Me"))
-        //         show_another_window = false;
-        //     ImGui::End();
-        // }
+        // Show another simple window.
+        if (show_another_window){
+            ImGui::Begin("Another Window", &show_another_window,4);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text("Hello from another window!");
+            if (ImGui::Button("Close Me"))
+                show_another_window = false;
+            ImGui::End();
+        }
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

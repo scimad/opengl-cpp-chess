@@ -20,7 +20,13 @@ if(${glfw3_FOUND})
     MESSAGE("[ZR]: GLFW3 link libraries = " ${glfw3_LINK_LIBRARIES})
 endif()
 
-include_directories( vendor/include vendor/include/imgui/ ${OPENGL_INCLUDE_DIRS}  ${glfw3_INCLUDE_DIRS})                                 # ${GLEW_INCLUDE_DIRS}
+include_directories(src/
+                    vendor/include
+                    vendor/include/imgui/
+                    ${OPENGL_INCLUDE_DIRS}
+                    ${glfw3_INCLUDE_DIRS}
+)                                 # ${GLEW_INCLUDE_DIRS}
+
 target_sources(opengl-chess PRIVATE main.cpp 
     src/graphics/renderer.cpp
     src/graphics/vertex_buffer.cpp
@@ -30,6 +36,10 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/graphics/shader.cpp
     src/graphics/texture.cpp
 
+    src/chess/game.cpp
+    src/chess/game_board.cpp
+    src/chess/interfaces/drawable.cpp
+
     vendor/src/ZR/core.cpp
     vendor/include/imgui/imgui.cpp
     vendor/include/imgui/imgui_demo.cpp
@@ -38,6 +48,5 @@ target_sources(opengl-chess PRIVATE main.cpp
     vendor/include/imgui/imgui_widgets.cpp
     vendor/include/imgui/imgui_impl_glfw.cpp
     vendor/include/imgui/imgui_impl_opengl3.cpp
-
 )
 target_link_libraries(opengl-chess ${OPENGL_LIBRARIES} ${glfw3_LINK_LIBRARIES} GLEW ${CMAKE_DL_LIBS})                # ${GLEW_LINK_LIBRARIES}
