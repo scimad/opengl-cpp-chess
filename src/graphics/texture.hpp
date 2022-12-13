@@ -2,6 +2,7 @@
 #define __TEXTURE
 
 #include "renderer.hpp"
+#include <string>
 
 class Texture{
 private:
