@@ -7,12 +7,15 @@
 #include "chess/game_board.hpp"
 #include "chess/pieces.hpp"
 
-
 #include "GLFW/glfw3.h"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 struct ChessGLConfig{
     
 };
+
 
 
 class ChessOpenGLEnv{
@@ -34,6 +37,8 @@ private:
 
     float window_scale;
     float refresh_rate;
+
+    glm::mat4 proj, view, model, mvp;
 
     Color clear_color;
     Renderer renderer;

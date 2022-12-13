@@ -17,6 +17,14 @@ ChessOpenGLEnv::ChessOpenGLEnv(){
     window_height = 640;
     window_width = 640;
 
+    proj = glm::ortho(0.0, 960.0, 0.0, 540.0, -1.0, 1.0);
+    view = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 0.0));
+    model = glm::mat4(1.0);
+
+    mvp = proj * view * model;
+
+
+
     clear_color = Color(0.2f, 0.2f, 0.2f, 0.0f);        //default color to clear
 
     if(loadBasicGLEnv() != 0){
