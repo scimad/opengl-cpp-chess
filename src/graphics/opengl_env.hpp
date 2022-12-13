@@ -22,6 +22,7 @@ public:
 
     ~ChessOpenGLEnv();
 
+    void processInput();
     int loadBasicGLEnv();
     int initialize(const GameBoard& board, const Pieces& pieces, float scale);
     int refresh_window();   //takes care of rendering and taking input

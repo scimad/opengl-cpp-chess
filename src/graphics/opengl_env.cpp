@@ -25,9 +25,14 @@ ChessOpenGLEnv::ChessOpenGLEnv(){
     };
 }
 
+void ChessOpenGLEnv::processInput(){
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    glfwSetWindowShouldClose(window, true);
+}
+
 int ChessOpenGLEnv::refresh_window(){
     int exit_flag = glfwWindowShouldClose(window);
-    processInput(window);
+    processInput();
     glfwSwapBuffers(window);
     // renderer.clear();
     glfwPollEvents();
