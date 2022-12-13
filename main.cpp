@@ -1,5 +1,8 @@
-#include "graphics/core.hpp"
+// #include "graphics/core.hpp"
+#include "chess/game.hpp"
 
 int main() {
-    return run_gl_core();
+    ChessGame game;
+    game.run();
+    // return run_gl_core();
 }
