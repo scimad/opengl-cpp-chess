@@ -22,6 +22,7 @@ public:
 
     ~ChessOpenGLEnv();
 
+    void GLunbindShaderVertexIndexBuffer();
     void processInput();
     int loadBasicGLEnv();
     int initialize(const GameBoard& board, const Pieces& pieces, float scale);

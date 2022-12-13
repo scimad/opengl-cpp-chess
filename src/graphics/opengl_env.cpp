@@ -30,6 +30,13 @@ void ChessOpenGLEnv::processInput(){
     glfwSetWindowShouldClose(window, true);
 }
 
+void ChessOpenGLEnv::GLunbindShaderVertexIndexBuffer(){
+    GLCALL(glBindVertexArray(0));
+    GLCALL(glUseProgram(0));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+};
+
 int ChessOpenGLEnv::refresh_window(){
     int exit_flag = glfwWindowShouldClose(window);
     processInput();
@@ -45,8 +52,8 @@ ChessOpenGLEnv::ChessOpenGLEnv(ChessGLConfig gl_config){
 
 int ChessOpenGLEnv::initialize(const GameBoard& board, const Pieces& pieces, float scale){
     window_scale = scale;
-    window_width = (int) window_scale* board.width_ratio;
-    window_height = (int) window_scale * board.height_ratio;
+    window_width = (int) (window_scale* board.width_ratio);
+    window_height = (int) (window_scale * board.height_ratio);
     glfwSetWindowSize(window, window_width, window_height);
 
     //Now render board texture
