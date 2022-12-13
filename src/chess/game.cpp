@@ -1,8 +1,11 @@
 #include "game.hpp"
 
+
+
 ChessGame::ChessGame(){
     board.setupStandard();
     pieces.setupStandard();
+    gui.initialize(board, pieces, 1.5);
 }
 
 ChessGame::ChessGame(GameState current_state){
@@ -17,7 +20,7 @@ void ChessGame::run(){
     //This will be game's main loop
     /* Loop until the user closes the window */
     while (!exit_flag){
-        exit_flag = gl_env.refresh_window();
+        exit_flag = gui.refresh_window();
     }
 
 }

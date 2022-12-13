@@ -35,11 +35,12 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/graphics/vertex_buffer_layout.cpp
     src/graphics/shader.cpp
     src/graphics/texture.cpp
-
     src/graphics/opengl_env.cpp
 
+    src/graphics/utils.cpp
 
     src/chess/game.cpp
+    src/chess/pieces.cpp
     src/chess/game_board.cpp
     src/chess/interfaces/drawable.cpp
 

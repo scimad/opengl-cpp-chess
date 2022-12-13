@@ -2,14 +2,10 @@
 #define __GAME_HPP
 
 #include "chess/game_board.hpp"
+#include "chess/pieces.hpp"
 #include "graphics/opengl_env.hpp"
 
 class GameState{};
-class Pieces{
-public:
-    void setupStandard(){};
-
-};
 class ChessTimer{};
 class GameHistory{};
 
@@ -21,7 +17,7 @@ enum{
 
 class ChessGame{
 private:
-    ChessOpenGLEnv gl_env;
+    ChessOpenGLEnv gui;
 
 public:
     bool exit_flag;

@@ -1,14 +1,17 @@
-#include "renderer.hpp"
+#ifndef __UTILS_HPP
+#define __UTILS_HPP
+
 #include "GLFW/glfw3.h"
 
-static void GLunbindShaderVertexIndexBuffer(){
-    GLCALL(glBindVertexArray(0));
-    GLCALL(glUseProgram(0));
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+class Color{
+    public:
+    float r, g, b, a;
+    Color();
+    Color(float r, float g, float b, float a=1.0);
 };
 
-void processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
-}
+
+void processInput(GLFWwindow *window);
+void GLunbindShaderVertexIndexBuffer();
+
+#endif // __UTILS_HPP
