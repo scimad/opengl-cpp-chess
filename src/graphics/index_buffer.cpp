@@ -3,6 +3,8 @@
 #include "renderer.hpp"
 #include <ZR/core.hpp>
 
+IndexBuffer::IndexBuffer(){};
+
 IndexBuffer::IndexBuffer(const unsigned int* data, GLuint count):count(count){
     GLCALL(glGenBuffers(1, &rendererID));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID));

@@ -12,6 +12,8 @@ enum class ShaderType{
     NONE = -1, VERTEX = 0, FRAGMENT = 1
 };
 
+Shader::Shader(){};
+
 Shader::Shader(const std::string& filename):shader_filename(filename), rendererID(0){
     ShaderProgramSource source = parseShader(shader_filename);
     rendererID = createShader(source.vertexSource, source.fragmentSource);
@@ -52,7 +54,7 @@ void Shader::setUniform4f(const std::string& uni_name, float v0, float v1, float
     GLCALL(glUniform4f(location, v0, v1, v2, v3));
 };
 
-int Shader::getUniformLocation(const std::string& uni_name){
+int Shader::getUniformLocation(const std::string& uni_name) {
     if (uniformrLocationCache.find(uni_name) != uniformrLocationCache.end()){
         return uniformrLocationCache[uni_name];
     }

@@ -15,21 +15,19 @@ bool GLIsErrorFree(const char* function, const char* file, int line){
         + std::to_string(error) +  ") from: " + function + " " + file + ":" + std::to_string(line), zr::VERBOSITY_LEVEL::ERROR);
         is_error_free = false;
     }
+    if (is_error_free == false){
+        zr::log("OpenGL found some error!!!!!");
+    }
     return is_error_free;
 }
+
+Renderer::Renderer(){}
 
 void Renderer::clear() const{
     GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 }
-void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, const Texture& texture) const{
-        // clear();
-        // Above clear() function gives issue. If we are making multiple draw calls to render multiple stuffs,
-        // then, clear() clears the recently drawn object() which will result in that object not appearing on screen at all.
-        // So, for now removing tha clear(); function on draw call and calling clear() only once.
-
-        texture.bind();
+void Renderer::draw(Drawable& drawable, const glm::mat4& model, const glm::mat4& view, const glm::mat4& proj)const {//, Shader& shader) const{
+        drawable.bind_va_ib_texture();
         shader.bind();
-        va.bind();
-        ib.bind();
-        GLCALL(glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr));
+        GLCALL(glDrawElements(GL_TRIANGLES, drawable.get_ibCount(), GL_UNSIGNED_INT, nullptr));
 };

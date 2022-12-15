@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 
+// #include "renderer.hpp"
+#include "GL/glew.h"
 #include "glm/glm.hpp"
 
 struct ShaderProgramSource{
@@ -21,6 +23,7 @@ private:
     std::unordered_map<std::string, int> uniformrLocationCache;
 public:
     Shader(const std::string& filename);
+    Shader();
     ~Shader();
 
     unsigned int getRendererID(){return rendererID;}

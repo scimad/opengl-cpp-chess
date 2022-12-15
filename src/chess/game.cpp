@@ -1,5 +1,5 @@
 #include "game.hpp"
-
+#include "ZR/core.hpp"
 
 
 ChessGame::ChessGame(){
@@ -20,7 +20,7 @@ void ChessGame::run(){
     //This will be game's main loop
     /* Loop until the user closes the window */
     while (!exit_flag){
-        exit_flag = gui.refresh_window();
+        exit_flag = gui.display(board, pieces);
     }
 
 }

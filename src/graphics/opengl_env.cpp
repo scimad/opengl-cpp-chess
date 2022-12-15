@@ -12,7 +12,8 @@ ChessOpenGLEnv::~ChessOpenGLEnv(){
     glfwTerminate();
 }
 
-ChessOpenGLEnv::ChessOpenGLEnv(){
+ChessOpenGLEnv::ChessOpenGLEnv():shader("../res/basic.shader"),renderer(shader)
+{
     window_scale = 1.0;                                 //default scale of window
     window_height = 640;
     window_width = 640;
@@ -31,6 +32,9 @@ ChessOpenGLEnv::ChessOpenGLEnv(){
         zr::log("Setting up OpenGL Environment failed.");
         exit(0);
     };
+
+    // shader = Shader("../res/basic.shader");         //First run GLEWInit() (which is inside loadBasicGLEnv) before creating shader(Program)
+
 }
 
 void ChessOpenGLEnv::processInput(){
@@ -45,11 +49,15 @@ void ChessOpenGLEnv::GLunbindShaderVertexIndexBuffer(){
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 };
 
-int ChessOpenGLEnv::refresh_window(){
+int ChessOpenGLEnv::display(GameBoard& board, const Pieces& pieces){
     int exit_flag = glfwWindowShouldClose(window);
     processInput();
+
+    //Draw board here
+    renderer.draw(board, view, model, proj);//, shader);
+
     glfwSwapBuffers(window);
-    // renderer.clear();
+    renderer.clear();
     glfwPollEvents();
     return exit_flag;
 }
@@ -64,7 +72,13 @@ int ChessOpenGLEnv::initialize(const GameBoard& board, const Pieces& pieces, flo
     window_height = (int) (window_scale * board.height_ratio);
     glfwSetWindowSize(window, window_width, window_height);
 
+    proj = glm::ortho(0.0, 960.0, 0.0, 540.0, -1.0, 1.0);
+    view = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 0.0));
+    model = glm::mat4(1.0);
+
     //Now render board texture
+
+
     return 0;
 }
 

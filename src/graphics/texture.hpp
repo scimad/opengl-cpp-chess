@@ -1,7 +1,6 @@
 #ifndef __TEXTURE
 #define __TEXTURE
 
-#include "renderer.hpp"
 #include <string>
 
 class Texture{
@@ -11,6 +10,7 @@ private:
 	unsigned char* localBuffer;
 	int width, height, BPP; //bits per pixel
 public:
+	Texture();
 	Texture(const std::string& path);
 	~Texture();
 	void bind(unsigned int slot=0) const;
