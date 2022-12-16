@@ -1,6 +1,7 @@
 #include "graphics/opengl_env.hpp"
-#include "graphics/renderer.hpp"
 #include "graphics/utils.hpp"
+
+#include "graphics/renderer.hpp"
 
 #include "chess/game_board.hpp"
 #include "chess/pieces.hpp"
@@ -134,9 +135,9 @@
 // --------------------------------------
 
 ChessOpenGLEnv::ChessOpenGLEnv(){
-
+    zr::log("OpenGLEnv constructor called.");
     initialize();
-    zr::log("Successfully initialized GLFW.");
+    
 };
 
 int ChessOpenGLEnv::initialize(){
@@ -145,4 +146,12 @@ int ChessOpenGLEnv::initialize(){
     zr::log("GLFW initialization failed.", zr::VERBOSITY_LEVEL::ERROR);
     return -1;
     }
+
+     // Choose OpenGL version and setup either compatibility profile or core profile 
+    GLCALL(glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3));
+    GLCALL(glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3));
+    GLCALL(glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE));      // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+
+    zr::log("Successfully initialized GLFW.");
+    return 0;
 }

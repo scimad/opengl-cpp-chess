@@ -1,6 +1,8 @@
+#include "ZR/core.hpp"
 #include "vertex_buffer.hpp"
+#include "graphics/utils.hpp"
 
-#include "renderer.hpp"
+#include "GL/glew.h"
 
 // VertexBuffer::VertexBuffer(){
 // 	zr::log("Empty vertex buffer created for now.");

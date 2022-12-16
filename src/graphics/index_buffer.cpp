@@ -1,6 +1,7 @@
 #include "index_buffer.hpp"
 
-#include "renderer.hpp"
+#include "graphics/utils.hpp"
+
 #include <ZR/core.hpp>
 
 IndexBuffer::IndexBuffer(){};

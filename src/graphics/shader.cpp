@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 
 #include "shader.hpp"
-#include "renderer.hpp"
+#include "graphics/utils.hpp"
 
 #include <ZR/core.hpp>
 

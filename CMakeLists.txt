@@ -36,6 +36,9 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/graphics/shader.cpp
     src/graphics/texture.cpp
     src/graphics/opengl_env.cpp
+    
+    src/graphics/gui.cpp
+    src/graphics/model.cpp
 
     src/graphics/utils.cpp
 
