@@ -16,22 +16,35 @@ enum{
 };
 
 class ChessGame{
-private:
+// private:
+//     ChessOpenGLEnv gui;
+
+// public:
+//     bool exit_flag;
+//     GameBoard board;
+//     Pieces pieces;
+//     ChessTimer timer;
+//     GameHistory history;
+//     bool can_castle[2]; //Can be indexed using LIGHT and DARK
+
+// public:
+//     ChessGame();
+//     ChessGame(GameState current_state);
+//     ~ChessGame();
+//     void run();
+// ---------------------------------------------------------
+
+public:
     ChessOpenGLEnv gui;
 
-public:
-    bool exit_flag;
-    GameBoard board;
-    Pieces pieces;
-    ChessTimer timer;
-    GameHistory history;
-    bool can_castle[2]; //Can be indexed using LIGHT and DARK
 
-public:
-    ChessGame();
-    ChessGame(GameState current_state);
-    ~ChessGame();
-    void run();
+
+
+
+
+
+
+
 
 };
 

@@ -18,32 +18,40 @@ struct ChessGLConfig{
 
 
 
+// class ChessOpenGLEnv{
+// public:
+//     ChessOpenGLEnv();
+//     ChessOpenGLEnv(ChessGLConfig gl_config);
+
+//     ~ChessOpenGLEnv();
+
+//     void GLunbindShaderVertexIndexBuffer();
+//     void processInput();
+//     int loadBasicGLEnv();
+//     int initialize(const GameBoard& board, const Pieces& pieces, float scale);
+//     int display(GameBoard& board, const Pieces& pieces);   //takes care of rendering and taking input
+// private:
+//     GLFWwindow* window;
+//     int window_width;
+//     int window_height;
+
+//     float window_scale;
+//     float refresh_rate;
+
+//     glm::mat4 proj, view, model, mvp;
+
+//     Color clear_color;
+//     Renderer renderer;
+//     Shader shader;
+
+// };
+
+
 class ChessOpenGLEnv{
 public:
     ChessOpenGLEnv();
-    ChessOpenGLEnv(ChessGLConfig gl_config);
-
-    ~ChessOpenGLEnv();
-
-    void GLunbindShaderVertexIndexBuffer();
-    void processInput();
-    int loadBasicGLEnv();
-    int initialize(const GameBoard& board, const Pieces& pieces, float scale);
-    int display(GameBoard& board, const Pieces& pieces);   //takes care of rendering and taking input
-private:
     GLFWwindow* window;
-    int window_width;
-    int window_height;
-
-    float window_scale;
-    float refresh_rate;
-
-    glm::mat4 proj, view, model, mvp;
-
-    Color clear_color;
-    Renderer renderer;
-    Shader shader;
-
+    int initialize();
 };
 
 #endif // __OPENGL_ENV_HPP
