@@ -1,6 +1,8 @@
 class DrawableModel
 {
 private:
+
+public:
     // vertex_data stuff should (?) be heap allocated or maybe use std::vector kinda things 
     float vertex_data[16] = {
      -50.0,  -50.0, 0.0, 0.0,
@@ -14,8 +16,6 @@ private:
         0, 1, 2,
         2, 3, 0
     };
-
-public:
     DrawableModel(/* args */);
     ~DrawableModel();
 };
