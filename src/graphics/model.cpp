@@ -7,3 +7,11 @@ DrawableModel::DrawableModel(){
 DrawableModel::~DrawableModel(){
 
 };
+
+DrawableModelV2::DrawableModelV2(){
+
+};
+
+DrawableModelV2::~DrawableModelV2(){
+
+};

@@ -4,9 +4,9 @@
 
 #include "GL/glew.h"
 
-// VertexBuffer::VertexBuffer(){
-// 	zr::log("Empty vertex buffer created for now.");
-// };
+VertexBuffer::VertexBuffer(){
+	zr::log("Empty vertex buffer created for now.");
+};
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size){
 
