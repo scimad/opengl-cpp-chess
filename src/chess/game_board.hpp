@@ -1,10 +1,9 @@
 #ifndef __GAME_BOARD_HPP
 #define __GAME_BOARD_HPP
 
-#include "interfaces/drawable.hpp"
 #include <string>
 
-class GameBoard : public Drawable
+class GameBoard
 {
 public:
     int width_ratio, height_ratio;
