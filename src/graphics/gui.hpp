@@ -1,7 +1,12 @@
+#ifndef __GUI_HPP
+#define __GUI_HPP
+
 #include <GLFW/glfw3.h>
 #include <GL/glew.h>
 
-#include "utils.hpp"
+#include "graphics/utils.hpp"
+#include "graphics/renderer.hpp"
+
 #include "glm/glm.hpp"
 
 class Gui
@@ -13,7 +18,8 @@ private:
     float window_scale;    
     Color clear_color;
 public:
-    GLFWwindow* gui_window;
+    GLFWwindow* gui_window; // IMPORTANT: Remember how you use this pointer ^1
+    Renderer renderer;
 
     // The following matrices perform the described transformation:
     // model        => 3D model's coordinate (in object's coordinate system) to world coordidnate system
@@ -28,3 +34,5 @@ public:
     int setup_opengl();
     int init_opengl();
 };
+
+#endif //__GUI_HPP

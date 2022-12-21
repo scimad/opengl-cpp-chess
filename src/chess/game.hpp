@@ -3,7 +3,9 @@
 
 #include "chess/game_board.hpp"
 #include "chess/pieces.hpp"
+
 #include "graphics/opengl_env.hpp"
+#include "graphics/gui.hpp"
 
 class GameState{};
 class ChessTimer{};
@@ -16,35 +18,29 @@ enum{
 };
 
 class ChessGame{
-// private:
-//     ChessOpenGLEnv gui;
-
-// public:
-//     bool exit_flag;
-//     GameBoard board;
-//     Pieces pieces;
-//     ChessTimer timer;
-//     GameHistory history;
-//     bool can_castle[2]; //Can be indexed using LIGHT and DARK
-
-// public:
-//     ChessGame();
-//     ChessGame(GameState current_state);
-//     ~ChessGame();
-//     void run();
-// ---------------------------------------------------------
+private:
+    // ChessOpenGLEnv gui;
 
 public:
-    ChessOpenGLEnv gui;
+    // bool exit_flag;
+    // GameBoard board;
+    // Pieces pieces;
+    // ChessTimer timer;
+    // GameHistory history;
+    // bool can_castle[2]; //Can be indexed using LIGHT and DARK
 
+    Gui gui;
 
+    DrawableModel dqueen_model;//("../res/dark.shader", "../assets/Chess_qdt45.svg.png"); // ^3
+    DrawableModel lrook_model;//("../res/light.shader", "../assets/Chess_rlt45.svg.png");
+    DrawableModel dking_model;//("../res/dark.shader", "../assets/Chess_kdt45.svg.png");
 
-
-
-
-
-
-
+public:
+    ChessGame();
+    // ChessGame(GameState current_state);
+    ~ChessGame();
+    void run();
+    void processInput();
 
 };
 
