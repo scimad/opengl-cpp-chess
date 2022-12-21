@@ -1,7 +1,6 @@
 # OpenGL-CPP-Chess
 
-
-All knowledge is derived.
+All knowledge is derived. All time is borrowed. Acknowledgement to Cherno and Ekbana. All glories to the Divine.
 
 Notes from the code:
 
