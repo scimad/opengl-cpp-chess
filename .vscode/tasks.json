@@ -1,0 +1,47 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "CHESS-CMAKE",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "CHESS-CMAKE STEP"
+        },
+        {
+            "type": "cppbuild",
+            "label": "CHESS-MAKE",
+            "command": "make",
+            "args": [
+                "-j6"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "CHESS MAKE STEP"
+        },
+        {
+            "label": "Chess-Build",
+            "dependsOn": [
+                "CHESS-CMAKE",
+                "CHESS-MAKE"
+            ]
+        }
+    ],
+    "version": "2.0.0"
+}
