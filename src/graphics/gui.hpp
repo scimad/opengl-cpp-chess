@@ -25,6 +25,6 @@ public:
 
     Gui(/* args */);
     ~Gui();
-    int config_opengl();
+    int setup_opengl();
     int init_opengl();
 };

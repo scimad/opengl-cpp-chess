@@ -9,7 +9,7 @@
 
 Gui::Gui(/* args */)
 {
-    config_opengl();
+    setup_opengl();
     init_opengl();
 }
 
@@ -18,7 +18,7 @@ Gui::~Gui()
 
 }
 
-int Gui::config_opengl(){
+int Gui::setup_opengl(){
     clear_color = Color(0.1, 0.2, 0.3);
     window_scale = 1.0;                                 //default scale of window
     window_height = 540;
