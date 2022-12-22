@@ -8,9 +8,11 @@
 class GameBoard : public DrawableModel
 {
 public:
-    int width_ratio, height_ratio;
-    int margin_ratio;
-    int square_length_ratio;
+    int board_width, board_height;
+    int board_margin;
+    int square_length;
+
+    float window_to_board_ratio;
 private:
     std::string board_image;
 public:

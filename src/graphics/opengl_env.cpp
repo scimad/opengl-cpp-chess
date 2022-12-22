@@ -69,8 +69,8 @@
 
 // int ChessOpenGLEnv::initialize(const GameBoard& board, const Pieces& pieces, float scale){
 //     window_scale = scale;
-//     window_width = (int) (window_scale* board.width_ratio);
-//     window_height = (int) (window_scale * board.height_ratio);
+//     window_width = (int) (window_scale* board.initial_width);
+//     window_height = (int) (window_scale * board.initial_height);
 //     glfwSetWindowSize(window, window_width, window_height);
 
 //     proj = glm::ortho(0.0, 960.0, 0.0, 540.0, -1.0, 1.0);

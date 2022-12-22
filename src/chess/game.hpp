@@ -32,14 +32,10 @@ private:
     GameState current_state;
 
 public:
+    Gui gui;
     bool exit_flag;
     
-    // Pieces pieces;
-    // ChessTimer timer;
-    // GameHistory history;
-    // bool can_castle[2]; //Can be indexed using LIGHT and DARK
-
-    Gui gui;
+    std::vector<std::unique_ptr<ChessPiece>> pieces;         //std::vector<ChessPiece> wont work
 
     // DrawableModels:
     GameBoard board;
@@ -48,6 +44,10 @@ public:
     DrawableModel dqueen_model;
     DrawableModel lrook_model;
     DrawableModel dking_model;
+
+    // ChessTimer timer;
+    // GameHistory history;
+    // bool can_castle[2]; //Can be indexed using LIGHT and DARK
 
 public:
     ChessGame();
