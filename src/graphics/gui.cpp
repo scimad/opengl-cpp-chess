@@ -21,8 +21,8 @@ Gui::~Gui()
 int Gui::setup_opengl(){
     clear_color = Color(0.1, 0.2, 0.3);
     window_scale = 1.0;                                 //default scale of window
-    window_height = 540;
-    window_width = 960;
+    window_height = 568;
+    window_width = 568*1.61;
 
     // proj = glm::ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // This seems to be default(?)
     proj = glm::ortho(0.0, (double)window_width, 0.0, (double)window_height, -1.0, 1.0);

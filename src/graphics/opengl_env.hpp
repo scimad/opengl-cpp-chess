@@ -5,7 +5,7 @@
 #include "graphics/utils.hpp"
 
 #include "chess/game_board.hpp"
-#include "chess/pieces.hpp"
+#include "chess/chess_piece.hpp"
 
 #include "GLFW/glfw3.h"
 
