@@ -38,7 +38,8 @@ public:
     Gui gui;
     bool exit_flag;
     
-    std::vector<ChessPiece*> pieces;        //Can we do std::vector<ChessPiece> pieces; instead?
+    std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
+                                            // And where have I freed these objects? Am I leaking?
     GameBoard board;
 
     // ChessTimer timer;
