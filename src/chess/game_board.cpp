@@ -20,19 +20,3 @@ GameBoard::GameBoard(const std::string& shader_path, const std::string& texture_
 GameBoard::~GameBoard()
 {
 }
-
-void GameBoard::setupStandard(){
-
-    // apparently dynamically modifying vertex buffer and rebinding it isn't working
-    // so, for now, the chess board is being fixed by using a different mvp, which
-    // may also be the better way to do things.
-
-    // vertex_data[0] = (float) margin_ratio;
-    // vertex_data[1] = (float) margin_ratio;
-    // vertex_data[4] = (boardboard_width;
-    // vertex_data[5] = (float) margin_ratio;
-    // vertex_data[8] = (boardboard_width;
-    // vertex_data[9] = (float) board_height;
-    // vertex_data[12] = (float) margin_ratio;
-    // vertex_data[13] = (float) board_height;
-}

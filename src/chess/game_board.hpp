@@ -13,12 +13,9 @@ public:
     int square_length;
 
     float window_to_board_ratio;
-private:
-    std::string board_image;
 public:
     GameBoard(const std::string& shader_path, const std::string& texture_path);
     ~GameBoard();
-    void setupStandard();
 };
 
 

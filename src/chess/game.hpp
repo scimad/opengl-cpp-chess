@@ -2,10 +2,12 @@
 #define __GAME_HPP
 
 #include "chess/game_board.hpp"
-#include "chess/pieces.hpp"
+#include "chess/chess_piece.hpp"
 
 #include "graphics/opengl_env.hpp"
 #include "graphics/gui.hpp"
+
+#include "glm/glm.hpp"
 
 enum ChessColors{
     LIGHT = 0,
@@ -30,20 +32,14 @@ class ChessGame{
 private:
     // ChessOpenGLEnv gui;
     GameState current_state;
+    glm::vec3 get_translation_from_position(std::string chess_position);
 
 public:
     Gui gui;
     bool exit_flag;
     
-    std::vector<std::unique_ptr<ChessPiece>> pieces;         //std::vector<ChessPiece> wont work
-
-    // DrawableModels:
+    std::vector<ChessPiece*> pieces;        //Can we do std::vector<ChessPiece> pieces; instead?
     GameBoard board;
-
-    //Convert these to ChessPiece class objects (that inherit DrawableModel)
-    DrawableModel dqueen_model;
-    DrawableModel lrook_model;
-    DrawableModel dking_model;
 
     // ChessTimer timer;
     // GameHistory history;
