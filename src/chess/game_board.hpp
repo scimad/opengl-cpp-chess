@@ -1,9 +1,11 @@
 #ifndef __GAME_BOARD_HPP
 #define __GAME_BOARD_HPP
 
+#include "graphics/model.hpp"
+
 #include <string>
 
-class GameBoard
+class GameBoard : public DrawableModel
 {
 public:
     int width_ratio, height_ratio;
@@ -12,7 +14,7 @@ public:
 private:
     std::string board_image;
 public:
-    GameBoard(/* args */);
+    GameBoard(const std::string& shader_path, const std::string& texture_path);
     ~GameBoard();
     void setupStandard();
 };

@@ -22,7 +22,7 @@ int Gui::setup_opengl(){
     clear_color = Color(0.1, 0.2, 0.3);
     window_scale = 1.0;                                 //default scale of window
     window_height = 540;
-    window_width = 960;
+    window_width = 540*1.61;
 
     // proj = glm::ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // This seems to be default(?)
     proj = glm::ortho(0.0, (double)window_width, 0.0, (double)window_height, -1.0, 1.0);
@@ -74,8 +74,8 @@ int Gui::init_opengl(){
                                     // (Maybe so that whene window pops out of stack, only one instance of it's copy exists
                                     // but why would that matter?!)
         // This gives transparency to transparent regions of pngs
-    GLCALL(glEnable(GL_BLEND));
-    GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    // GLCALL(glEnable(GL_BLEND));
+    // GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
     return 0;

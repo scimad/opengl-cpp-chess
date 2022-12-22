@@ -7,23 +7,33 @@
 #include "graphics/opengl_env.hpp"
 #include "graphics/gui.hpp"
 
-class GameState{};
-class ChessTimer{};
-class GameHistory{};
-
-
-enum{
+enum ChessColors{
     LIGHT = 0,
     DARK = 1
 };
 
+typedef ChessColors Player;
+
+class GameState{
+    bool is_checked;
+    Player current_player;
+    bool is_white_castled;
+    bool is_black_castled;
+    unsigned int irreversible_move_count;
+    unsigned int repeated_moves_count;
+};
+
+class ChessTimer{};
+class GameHistory{};
+
 class ChessGame{
 private:
     // ChessOpenGLEnv gui;
+    GameState current_state;
 
 public:
-    // bool exit_flag;
-    // GameBoard board;
+    bool exit_flag;
+    
     // Pieces pieces;
     // ChessTimer timer;
     // GameHistory history;
@@ -31,13 +41,16 @@ public:
 
     Gui gui;
 
-    DrawableModel dqueen_model;//("../res/dark.shader", "../assets/Chess_qdt45.svg.png"); // ^3
-    DrawableModel lrook_model;//("../res/light.shader", "../assets/Chess_rlt45.svg.png");
-    DrawableModel dking_model;//("../res/dark.shader", "../assets/Chess_kdt45.svg.png");
+    // DrawableModels:
+    GameBoard board;
+
+    //Convert these to ChessPiece class objects (that inherit DrawableModel)
+    DrawableModel dqueen_model;
+    DrawableModel lrook_model;
+    DrawableModel dking_model;
 
 public:
     ChessGame();
-    // ChessGame(GameState current_state);
     ~ChessGame();
     void run();
     void processInput();
