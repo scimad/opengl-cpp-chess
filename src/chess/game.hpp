@@ -49,7 +49,7 @@ public:
     ChessGame();
     ~ChessGame();
     void run();
-    void update_gui(float r);
+    void update_gui();
     void processInput();
 
 

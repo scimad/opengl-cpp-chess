@@ -77,7 +77,7 @@ glm::vec3 ChessGame::get_translation_from_position(std::string chess_position){
     return position;
 }
 
-void ChessGame::update_gui(float r){
+void ChessGame::update_gui(){
     // Render board
     {
         glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
@@ -87,7 +87,7 @@ void ChessGame::update_gui(float r){
         // Binding is handled inside setUniform
         // shader.setUniform1i("u_texture", 0);
         (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
-        (*board.shader_ptr).setUniform4f("u_color", r/2, r/4, 0, 0.0); //if uniform is not used in shader, it gives error / notification
+        (*board.shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
         gui.renderer.draw(board);
     }
 
@@ -100,7 +100,7 @@ void ChessGame::update_gui(float r){
             // Binding is handled inside setUniform
             // shader.setUniform1i("u_texture", 0);
             (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
-            (*(*piece).shader_ptr).setUniform4f("u_color", r, 0, 0, 0.0); //if uniform is not used in shader, it gives error / notification
+            (*(*piece).shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
             gui.renderer.draw((*piece));
         }
     }
@@ -116,16 +116,13 @@ void ChessGame::update_gui(float r){
 
 void ChessGame::run(){
     // Utility variables
-    float r = 0.0f;
-    float increament = 0.0025f;
+
     /* Loop until the user closes the window */
     while (!gui.exit_flag || (*this).end_and_exit){
-        r += increament;
-        if (r > 0.25 || r < 0) increament *= -1;
         processInput();
         /* Render here || Make the draw calls here || Draw the models here*/
 
-        update_gui(r);
+        update_gui();
 
         glfwPollEvents();
     }
