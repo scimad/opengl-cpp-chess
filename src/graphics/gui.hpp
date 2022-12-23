@@ -1,11 +1,14 @@
 #ifndef __GUI_HPP
 #define __GUI_HPP
 
-#include <GLFW/glfw3.h>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include "graphics/utils.hpp"
 #include "graphics/renderer.hpp"
+
+#include "chess/chess_piece.hpp"
+#include "chess/game_board.hpp"
 
 #include "glm/glm.hpp"
 
@@ -36,8 +39,9 @@ public:
 
     Gui(/* args */);
     ~Gui();
-    int setup_opengl();
-    int init_opengl();
+    int setup_opengl(); // setup opengl stuffs
+    int init_opengl();  // init opengl stuffs
+    int redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board);  //redraw opengl stuffs
 };
 
 #endif //__GUI_HPP

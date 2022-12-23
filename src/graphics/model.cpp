@@ -30,7 +30,7 @@ DrawableModel::~DrawableModel(){
 
 };
 
-void DrawableModel::bind(){
+void DrawableModel::bind() const{
     (*texture_ptr).bind();
     (*va_ptr).bind();
     (*ib_ptr).bind();

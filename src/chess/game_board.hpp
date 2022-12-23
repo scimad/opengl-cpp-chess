@@ -3,6 +3,8 @@
 
 #include "graphics/model.hpp"
 
+#include "glm/glm.hpp"
+
 #include <string>
 
 class GameBoard : public DrawableModel
@@ -16,8 +18,8 @@ public:
 public:
     GameBoard(const std::string& shader_path, const std::string& texture_path);
     ~GameBoard();
+    glm::vec3 get_translation_from_position(const std::string& chess_position) const;
 };
-
 
 
 

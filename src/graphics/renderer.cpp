@@ -11,7 +11,7 @@ Renderer::Renderer(){}
 void Renderer::clear() const{
     GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 };
-void Renderer::draw(DrawableModel& drawable_model)const {//, Shader& shader) const{
+void Renderer::draw(const DrawableModel& drawable_model) const {
     drawable_model.bind();
     GLCALL(glDrawElements(GL_TRIANGLES, drawable_model.get_ibCount(), GL_UNSIGNED_INT, nullptr));
 };

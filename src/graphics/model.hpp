@@ -36,7 +36,7 @@ public:
 
     unsigned int get_ibCount() const;
 
-    void bind();
+    void bind() const;
     DrawableModel(const std::string& shader_path, const std::string& texture_path);
     ~DrawableModel();
 };

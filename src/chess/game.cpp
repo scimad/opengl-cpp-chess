@@ -62,68 +62,13 @@ void ChessGame::processInput() {
     gui.exit_flag = glfwWindowShouldClose(gui.gui_window);
 }
 
-glm::vec3 ChessGame::get_translation_from_position(std::string chess_position){
-    glm::vec3 center_of_A1(
-                (float) board.board_margin + (float) board.square_length/2.0,
-                (float) board.board_margin + (float) board.square_length/2.0,
-                0);
-    char file = chess_position.c_str()[0];  //Assuming uppercase
-    char rank = chess_position.c_str()[1];
-
-    glm::vec3 position = center_of_A1 + glm::vec3(
-        ((int) file - 65) * (float) board.square_length,        // ASCII of 'A' is 65
-        ((int) rank - 49) * (float) board.square_length,        // ASCII of '1' is 49
-        0);
-    return position;
-}
-
-void ChessGame::update_gui(){
-    // Render board
-    {
-        glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
-        glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3((float) board.board_width/2.0, (float) board.board_height/2.0, 0.0));
-        glm::mat4 mvp = gui.proj * view * model;
-
-        // Binding is handled inside setUniform
-        // shader.setUniform1i("u_texture", 0);
-        (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
-        (*board.shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
-        gui.renderer.draw(board);
-    }
-
-    //Render pieces
-    {
-        for (auto& piece : pieces){
-            glm::mat4 model = glm::translate(glm::mat4(1.0), get_translation_from_position((*piece).position));
-            glm::mat4 mvp = gui.proj * gui.view * model;
-
-            // Binding is handled inside setUniform
-            // shader.setUniform1i("u_texture", 0);
-            (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
-            (*(*piece).shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
-            gui.renderer.draw((*piece));
-        }
-    }
-
-    //Render anything else
-    {
-
-    }
-    /* Swap front and back buffers */
-    glfwSwapBuffers(gui.gui_window);
-    gui.renderer.clear();
-}
-
 void ChessGame::run(){
     // Utility variables
 
     /* Loop until the user closes the window */
     while (!gui.exit_flag || (*this).end_and_exit){
         processInput();
-        /* Render here || Make the draw calls here || Draw the models here*/
-
-        update_gui();
-
+        gui.redraw_gl_contents(pieces, board);
         glfwPollEvents();
     }
 

@@ -1,8 +1,12 @@
+#include "graphics/gui.hpp"
 
 #include "graphics/utils.hpp"
-#include "graphics/gui.hpp"
-#include "ZR/core.hpp"
+#include "chess/chess_piece.hpp"
+#include "chess/game_board.hpp"
 
+#include "chess/game.hpp"
+
+#include "ZR/core.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 
@@ -79,4 +83,43 @@ int Gui::init_opengl(){
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
     return 0;
+}
+
+int Gui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board){
+        /* Render here || Make the draw calls here || Draw the models here*/
+    // Render board
+    {
+        glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
+        glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3((float) board.board_width/2.0, (float) board.board_height/2.0, 0.0));
+        glm::mat4 mvp = proj * view * model;
+
+        // Binding is handled inside setUniform
+        // shader.setUniform1i("u_texture", 0);
+        (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
+        (*board.shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
+        renderer.draw(board);
+    }
+
+    //Render pieces
+    {
+        for (auto& piece : pieces){
+            glm::mat4 model = glm::translate(glm::mat4(1.0),  board.get_translation_from_position((*piece).position));
+            glm::mat4 mvp = proj * view * model;
+
+            // Binding is handled inside setUniform
+            // shader.setUniform1i("u_texture", 0);
+            (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
+            (*(*piece).shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
+            renderer.draw((*piece));
+        }
+    }
+
+    //Render anything else
+    {
+
+    }
+
+    /* Swap front and back buffers */
+    glfwSwapBuffers(gui_window);
+    renderer.clear();
 }

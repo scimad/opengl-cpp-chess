@@ -23,7 +23,7 @@ public:
     Renderer();
     Renderer(Shader& shader):shader(shader){};
     Shader shader;
-    void draw(DrawableModel& drawable_model) const;
+    void draw(const DrawableModel& drawable_model) const;
     void clear() const;
 };
 

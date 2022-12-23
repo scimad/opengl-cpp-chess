@@ -6,8 +6,6 @@
 
 #include "graphics/gui.hpp"
 
-#include "glm/glm.hpp"
-
 enum ChessColors{
     LIGHT = 0,
     DARK = 1
@@ -31,14 +29,13 @@ class ChessGame{
 private:
     // ChessOpenGLEnv gui;
     GameState current_state;
-    glm::vec3 get_translation_from_position(std::string chess_position);
 
 public:
+    static glm::vec3 get_translation_from_position(const GameBoard& board, std::string chess_position);
     Gui gui;
     bool end_and_exit;
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
-                                            // And where have I freed these objects? Am I leaking?
     GameBoard board;
 
     // ChessTimer timer;
@@ -49,7 +46,6 @@ public:
     ChessGame();
     ~ChessGame();
     void run();
-    void update_gui();
     void processInput();
 
 
