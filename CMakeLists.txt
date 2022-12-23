@@ -28,6 +28,7 @@ include_directories(src/
 )                                 # ${GLEW_INCLUDE_DIRS}
 
 target_sources(opengl-chess PRIVATE main.cpp 
+    src/graphics/utils.cpp
     src/graphics/renderer.cpp
     src/graphics/vertex_buffer.cpp
     src/graphics/index_buffer.cpp
@@ -35,12 +36,8 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/graphics/vertex_buffer_layout.cpp
     src/graphics/shader.cpp
     src/graphics/texture.cpp
-    src/graphics/opengl_env.cpp
-    
     src/graphics/gui.cpp
     src/graphics/model.cpp
-
-    src/graphics/utils.cpp
 
     src/chess/game.cpp
     src/chess/chess_piece.cpp

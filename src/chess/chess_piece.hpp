@@ -9,6 +9,9 @@ class ChessPiece : public DrawableModel{
 public:
     ChessPiece(const std::string& shader_path, const std::string& texture_path, std::string board_position="");
     std::string position;
+
+    ~ChessPiece();
+
 };
 
 #endif // __CHESS_PIECE_HPP

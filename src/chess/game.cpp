@@ -7,7 +7,7 @@
 #include<memory>
 
 ChessGame::ChessGame():
-    board("../res/basic.shader", "../assets/Board.png")
+    board("../res/basic.shader", "../assets/Board.png"),end_and_exit(false)
 {
     //8 light pawns and 8 dark pawns
     for (size_t i=0; i< 8; i++)
@@ -49,12 +49,17 @@ ChessGame::ChessGame():
 // }
 
 ChessGame::~ChessGame(){
-
+    for (auto& piece : pieces){
+        delete piece;
+    }
 }
 
 void ChessGame::processInput() {
-    if (glfwGetKey(gui.gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(gui.gui_window, true);
+    if (glfwGetKey(gui.gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(gui.gui_window, true);
+    }
+
+    gui.exit_flag = glfwWindowShouldClose(gui.gui_window);
 }
 
 glm::vec3 ChessGame::get_translation_from_position(std::string chess_position){
@@ -72,49 +77,56 @@ glm::vec3 ChessGame::get_translation_from_position(std::string chess_position){
     return position;
 }
 
+void ChessGame::update_gui(float r){
+    // Render board
+    {
+        glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
+        glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3((float) board.board_width/2.0, (float) board.board_height/2.0, 0.0));
+        glm::mat4 mvp = gui.proj * view * model;
+
+        // Binding is handled inside setUniform
+        // shader.setUniform1i("u_texture", 0);
+        (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
+        (*board.shader_ptr).setUniform4f("u_color", r/2, r/4, 0, 0.0); //if uniform is not used in shader, it gives error / notification
+        gui.renderer.draw(board);
+    }
+
+    //Render pieces
+    {
+        for (auto& piece : pieces){
+            glm::mat4 model = glm::translate(glm::mat4(1.0), get_translation_from_position((*piece).position));
+            glm::mat4 mvp = gui.proj * gui.view * model;
+
+            // Binding is handled inside setUniform
+            // shader.setUniform1i("u_texture", 0);
+            (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
+            (*(*piece).shader_ptr).setUniform4f("u_color", r, 0, 0, 0.0); //if uniform is not used in shader, it gives error / notification
+            gui.renderer.draw((*piece));
+        }
+    }
+
+    //Render anything else
+    {
+
+    }
+    /* Swap front and back buffers */
+    glfwSwapBuffers(gui.gui_window);
+    gui.renderer.clear();
+}
+
 void ChessGame::run(){
     // Utility variables
-    exit_flag = false;
     float r = 0.0f;
     float increament = 0.0025f;
     /* Loop until the user closes the window */
-    while (!exit_flag){
+    while (!gui.exit_flag || (*this).end_and_exit){
         r += increament;
         if (r > 0.25 || r < 0) increament *= -1;
-        exit_flag = glfwWindowShouldClose(gui.gui_window);
         processInput();
         /* Render here || Make the draw calls here || Draw the models here*/
 
-        // Render board
-        {
-            glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
-            glm::mat4 view = glm::translate(glm::mat4(1.0), glm::vec3((float) board.board_width/2.0, (float) board.board_height/2.0, 0.0));
-            glm::mat4 mvp = gui.proj * view * model;
-           // Following shader binding is actually refactored / solved using Materials
-            (*board.shader_ptr).bind();
-            // shader.setUniform1i("u_texture", 0);
-            (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
-            (*board.shader_ptr).setUniform4f("u_color", r/2, r/4, 0, 0.0); //if uniform is not used in shader, it gives error / notification
-            gui.renderer.draw(board);
-        }
+        update_gui(r);
 
-        //Render pieces
-        {
-            for (auto& piece : pieces){
-                glm::mat4 model = glm::translate(glm::mat4(1.0), get_translation_from_position((*piece).position));
-                glm::mat4 mvp = gui.proj * gui.view * model;
-                // Following shader binding is actually refactored / solved using Materials
-                (*(*piece).shader_ptr).bind();
-                // shader.setUniform1i("u_texture", 0);
-                (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
-                (*(*piece).shader_ptr).setUniform4f("u_color", r, 0, 0, 0.0); //if uniform is not used in shader, it gives error / notification
-                gui.renderer.draw((*piece));
-            }
-        }
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(gui.gui_window);
-        gui.renderer.clear();
         glfwPollEvents();
     }
 

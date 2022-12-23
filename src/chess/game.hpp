@@ -4,7 +4,6 @@
 #include "chess/game_board.hpp"
 #include "chess/chess_piece.hpp"
 
-#include "graphics/opengl_env.hpp"
 #include "graphics/gui.hpp"
 
 #include "glm/glm.hpp"
@@ -36,7 +35,7 @@ private:
 
 public:
     Gui gui;
-    bool exit_flag;
+    bool end_and_exit;
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
                                             // And where have I freed these objects? Am I leaking?
@@ -50,7 +49,9 @@ public:
     ChessGame();
     ~ChessGame();
     void run();
+    void update_gui(float r);
     void processInput();
+
 
 };
 

@@ -7,7 +7,7 @@
 
 
 
-Gui::Gui(/* args */)
+Gui::Gui(/* args */):exit_flag(false)
 {
     setup_opengl();
     init_opengl();

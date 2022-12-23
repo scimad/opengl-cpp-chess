@@ -9,6 +9,10 @@
 
 #include "glm/glm.hpp"
 
+struct ChessGLConfig{
+
+};
+
 class Gui
 {
 private:
@@ -20,6 +24,7 @@ private:
 public:
     GLFWwindow* gui_window; // IMPORTANT: Remember how you use this pointer ^1
     Renderer renderer;
+    bool exit_flag;
 
     // The following matrices perform the described transformation:
     // model        => 3D model's coordinate (in object's coordinate system) to world coordidnate system
