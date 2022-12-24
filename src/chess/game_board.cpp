@@ -32,8 +32,8 @@ glm::vec3 GameBoard::get_translation_from_position(const std::string& chess_posi
     char rank = chess_position.c_str()[1];
 
     glm::vec3 position = center_of_A1 + glm::vec3(
-        ((int) file - 65) * (float) square_length,        // ASCII of 'A' is 65
-        ((int) rank - 49) * (float) square_length,        // ASCII of '1' is 49
+        ((int) file - (int) 'A') * (float) square_length,        // ASCII of 'A' is 65
+        ((int) rank - (int) '1') * (float) square_length,        // ASCII of '1' is 49
         0);
     return position;
 }

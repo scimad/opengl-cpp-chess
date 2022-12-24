@@ -100,7 +100,7 @@ void Gui::st_mouse_button_callback(GLFWwindow* window, int button, int action, i
 
 void Gui::mouse_button_callback()
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){        
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
     }
 
     cursor_xpos_wrt_board = cursor_xpos_wrt_window;
