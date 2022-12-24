@@ -25,8 +25,17 @@ private:
     float window_scale;    
     Color clear_color;
 
-    double cursor_xpos, cursor_ypos;
+    bool is_window_resizable;
+
+    //window coordinate system: 0,0 on top left
+    double cursor_xpos_wrt_window, cursor_ypos_wrt_window;
+
+    //board coordinate system: 0,0 on mid of A1 square
+    double cursor_xpos_wrt_board, cursor_ypos_wrt_board;
     int button, action, mods;
+
+    //
+    static Gui* get_gui_of_window(const GLFWwindow* window);
 
 public:
     inline static std::vector<Gui*> all_gui {};
@@ -39,9 +48,12 @@ public:
     // Callbacks for OpenGL GUI events
     static void st_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
     static void st_cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+    static void st_window_resize_callback(GLFWwindow* window, int width, int height);
     
     void mouse_button_callback();
     void cursor_position_callback();
+    void window_resize_callback();
+
     
 
     // The following matrices perform the described transformation:

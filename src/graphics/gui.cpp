@@ -7,6 +7,8 @@
 #include "chess/game.hpp"
 
 #include "ZR/core.hpp"
+
+#include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
 
@@ -26,7 +28,9 @@ int Gui::setup_opengl(){
     clear_color = Color(0.1, 0.2, 0.3);
     window_scale = 1.0;                                 //default scale of window
     window_height = 568;
-    window_width = 568*1.61;
+    window_width = 568 * glm::golden_ratio<float>();
+
+    is_window_resizable = true;
 
     // proj = glm::ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // This seems to be default(?)
     proj = glm::ortho(0.0, (double)window_width, 0.0, (double)window_height, -1.0, 1.0);
@@ -35,19 +39,28 @@ int Gui::setup_opengl(){
     return 0;
 }
 
+Gui* Gui::get_gui_of_window(const GLFWwindow* window){
+    int index = 0;  //at least one Chess Gui / Window exists in the program
+    for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
+         if (all_window[index] == window){
+            return all_gui[index];
+         }
+    }
+    return nullptr; //theoretically never happens.
+}
+
 void Gui::st_cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     int index = 0;
     for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
          if (all_window[index] == window){
-            (*(Gui*) all_gui[index]).cursor_xpos = xpos;
-            (*(Gui*) all_gui[index]).cursor_ypos = ypos;
+            (*(Gui*) all_gui[index]).cursor_xpos_wrt_window = xpos;
+            (*(Gui*) all_gui[index]).cursor_ypos_wrt_window = ypos;
             (*(Gui*) all_gui[index]).cursor_position_callback();
             break;
          }
     }
 }
-
 
 void Gui::cursor_position_callback()
 {
@@ -55,13 +68,21 @@ void Gui::cursor_position_callback()
 
 }
 
-void Gui::mouse_button_callback()
-{
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-        zr::log("Left Button clicked");
+void Gui::st_window_resize_callback(GLFWwindow* window, int width, int height){
+    int index = 0;
+    for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
+        if (all_window[index] == window){
+            (*(Gui*) all_gui[index]).window_height = height;
+            (*(Gui*) all_gui[index]).window_width = width;
+            (*(Gui*) all_gui[index]).window_resize_callback();
+            break;
+        }
     }
 }
 
+void Gui::window_resize_callback(){
+    //If anything needs to be done that window specific.
+}
 
 void Gui::st_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -77,6 +98,20 @@ void Gui::st_mouse_button_callback(GLFWwindow* window, int button, int action, i
     }
 }
 
+void Gui::mouse_button_callback()
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){        
+    }
+
+    cursor_xpos_wrt_board = cursor_xpos_wrt_window;
+    cursor_ypos_wrt_board = window_height - cursor_ypos_wrt_window;
+    zr::log("Left Button clicked at: " + std::to_string(cursor_xpos_wrt_board) + ", " + std::to_string(cursor_ypos_wrt_board));
+
+}
+
+
+
+
 int Gui::init_opengl(){
     zr::log_level = zr::VERBOSITY_LEVEL::DEBUG;
     if (!glfwInit()){
@@ -84,6 +119,12 @@ int Gui::init_opengl(){
         return -1;
     }
     zr::log("Successfully initialized GLFW.");
+
+    if (!is_window_resizable){
+        GLCALL(glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE));
+    }else{
+        GLCALL(glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE));
+    }
 
     // Choose OpenGL version and setup either compatibility profile or core profile 
     GLCALL(glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3));
@@ -117,15 +158,14 @@ int Gui::init_opengl(){
     zr::log("Successfully initialized GLEW.");
     zr::log("OpenGL Version: " + std::string((const char*) glGetString(GL_VERSION)));
 
-                                    // (Maybe so that whene window pops out of stack, only one instance of it's copy exists
-                                    // but why would that matter?!)
-        // This gives transparency to transparent regions of pngs
+    // This gives transparency to transparent regions of pngs
     GLCALL(glEnable(GL_BLEND));
     GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
     glfwSetMouseButtonCallback(window, st_mouse_button_callback);
     glfwSetCursorPosCallback(window, st_cursor_position_callback);
+    glfwSetWindowSizeCallback(window, st_window_resize_callback);
 
     Gui::all_gui.push_back(this);
     Gui::all_window.push_back(window);
