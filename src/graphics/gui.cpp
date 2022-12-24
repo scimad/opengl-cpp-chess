@@ -35,6 +35,48 @@ int Gui::setup_opengl(){
     return 0;
 }
 
+void Gui::st_cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    int index = 0;
+    for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
+         if (all_window[index] == window){
+            (*(Gui*) all_gui[index]).cursor_xpos = xpos;
+            (*(Gui*) all_gui[index]).cursor_ypos = ypos;
+            (*(Gui*) all_gui[index]).cursor_position_callback();
+            break;
+         }
+    }
+}
+
+
+void Gui::cursor_position_callback()
+{
+
+
+}
+
+void Gui::mouse_button_callback()
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+        zr::log("Left Button clicked");
+    }
+}
+
+
+void Gui::st_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    int index = 0;
+    for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
+        if (all_window[index] == window){
+            (*(Gui*) all_gui[index]).button = button;
+            (*(Gui*) all_gui[index]).action = action;
+            (*(Gui*) all_gui[index]).mods = mods;
+            (*(Gui*) all_gui[index]).mouse_button_callback();
+            break;
+        }
+    }
+}
+
 int Gui::init_opengl(){
     zr::log_level = zr::VERBOSITY_LEVEL::DEBUG;
     if (!glfwInit()){
@@ -82,6 +124,12 @@ int Gui::init_opengl(){
     GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
+    glfwSetMouseButtonCallback(window, st_mouse_button_callback);
+    glfwSetCursorPosCallback(window, st_cursor_position_callback);
+
+    Gui::all_gui.push_back(this);
+    Gui::all_window.push_back(window);
+
     return 0;
 }
 
@@ -122,4 +170,5 @@ int Gui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBo
     /* Swap front and back buffers */
     glfwSwapBuffers(gui_window);
     renderer.clear();
+    return 0;
 }

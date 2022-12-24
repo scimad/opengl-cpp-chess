@@ -55,6 +55,11 @@ ChessGame::~ChessGame(){
 }
 
 void ChessGame::processInput() {
+
+    // TODO: These stuffs might need to move to GUI
+    // and instead, the ChessGame class will have a listener for move requests
+    // which will be fired when there is a move request in the request queue
+    // to which it might respond, success or failed (or processing)
     glfwPollEvents();
     if (glfwGetKey(gui.gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(gui.gui_window, true);
