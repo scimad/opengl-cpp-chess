@@ -55,6 +55,7 @@ ChessGame::~ChessGame(){
 }
 
 void ChessGame::processInput() {
+    glfwPollEvents();
     if (glfwGetKey(gui.gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(gui.gui_window, true);
     }
@@ -69,7 +70,6 @@ void ChessGame::run(){
     while (!gui.exit_flag || (*this).end_and_exit){
         processInput();
         gui.redraw_gl_contents(pieces, board);
-        glfwPollEvents();
     }
 
     glfwTerminate(); // Refer to the notes on README.md of this project
