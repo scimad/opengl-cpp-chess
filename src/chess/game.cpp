@@ -54,27 +54,30 @@ ChessGame::~ChessGame(){
     }
 }
 
-void ChessGame::processInput() {
+void ChessGame::process_requests() {
+    std::string position = "";
+    for (auto clickevent : glui.button_actions_queue){
+        glm::vec2 board_xy = glui.transform_xy_window_to_board(board, std::get<1>(clickevent));
+        std::string position = board.get_board_position_from_xy(board_xy);
 
-    // TODO: These stuffs might need to move to GUI
-    // and instead, the ChessGame class will have a listener for move requests
-    // which will be fired when there is a move request in the request queue
-    // to which it might respond, success or failed (or processing)
-    glfwPollEvents();
-    if (glfwGetKey(gui.gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(gui.gui_window, true);
+        if (position != ""){
+            zr::log("Selecting " + position);
+        }
     }
 
-    gui.exit_flag = glfwWindowShouldClose(gui.gui_window);
+    glui.button_actions_queue.clear();
 }
 
 void ChessGame::run(){
     // Utility variables
 
     /* Loop until the user closes the window */
-    while (!gui.exit_flag || (*this).end_and_exit){
-        processInput();
-        gui.redraw_gl_contents(pieces, board);
+    while (!glui.exit_flag || (*this).end_and_exit){
+        // processInput();
+        glui.redraw_gl_contents(pieces, board);
+        glui.refresh_gl_inputs();
+
+        process_requests();
     }
 
     glfwTerminate(); // Refer to the notes on README.md of this project

@@ -31,8 +31,7 @@ private:
     GameState current_state;
 
 public:
-    static glm::vec3 get_translation_from_position(const GameBoard& board, std::string chess_position);
-    Gui gui;
+    GLui glui;
     bool end_and_exit;
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
@@ -46,9 +45,7 @@ public:
     ChessGame();
     ~ChessGame();
     void run();
-    void processInput();
-
-
+    void process_requests();
 };
 
 #endif// __GAME_HPP

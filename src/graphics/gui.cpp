@@ -13,18 +13,18 @@
 
 
 
-Gui::Gui(/* args */):exit_flag(false)
+GLui::GLui(/* args */):exit_flag(false)
 {
     setup_opengl();
     init_opengl();
 }
 
-Gui::~Gui()
+GLui::~GLui()
 {
 
 }
 
-int Gui::setup_opengl(){
+int GLui::setup_opengl(){
     clear_color = Color(0.1, 0.2, 0.3);
     window_scale = 1.0;                                 //default scale of window
     window_height = 568;
@@ -39,8 +39,8 @@ int Gui::setup_opengl(){
     return 0;
 }
 
-Gui* Gui::get_gui_of_window(const GLFWwindow* window){
-    int index = 0;  //at least one Chess Gui / Window exists in the program
+GLui* GLui::get_gui_of_window(const GLFWwindow* window){
+    int index = 0;  //at least one Chess GLui / Window exists in the program
     for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
          if (all_window[index] == window){
             return all_gui[index];
@@ -49,70 +49,104 @@ Gui* Gui::get_gui_of_window(const GLFWwindow* window){
     return nullptr; //theoretically never happens.
 }
 
-void Gui::st_cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+void GLui::st_cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     int index = 0;
     for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
          if (all_window[index] == window){
-            (*(Gui*) all_gui[index]).cursor_xpos_wrt_window = xpos;
-            (*(Gui*) all_gui[index]).cursor_ypos_wrt_window = ypos;
-            (*(Gui*) all_gui[index]).cursor_position_callback();
+            (*(GLui*) all_gui[index]).cursor_xpos_wrt_window = xpos;
+            (*(GLui*) all_gui[index]).cursor_ypos_wrt_window = ypos;
+            (*(GLui*) all_gui[index]).cursor_position_callback();
             break;
          }
     }
 }
 
-void Gui::cursor_position_callback()
+void GLui::cursor_position_callback()
 {
 
 
 }
 
-void Gui::st_window_resize_callback(GLFWwindow* window, int width, int height){
+void GLui::st_window_resize_callback(GLFWwindow* window, int width, int height){
     int index = 0;
     for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
         if (all_window[index] == window){
-            (*(Gui*) all_gui[index]).window_height = height;
-            (*(Gui*) all_gui[index]).window_width = width;
-            (*(Gui*) all_gui[index]).window_resize_callback();
+            (*(GLui*) all_gui[index]).window_height = height;
+            (*(GLui*) all_gui[index]).window_width = width;
+            (*(GLui*) all_gui[index]).window_resize_callback();
             break;
         }
     }
 }
 
-void Gui::window_resize_callback(){
-    //If anything needs to be done that window specific.
+void GLui::window_resize_callback(){
+    // If anything needs to be done that window specific.
+    // TODO: update the coordinate transformation matrix between window and board
+
+
+    // if re-scaling is enabled, we need a scaling transformation as well
+
+    // for no-scaling, only change of origin / axes is needed.
+
+
+
+
+
+
+
+
 }
 
-void Gui::st_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+void GLui::st_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     int index = 0;
     for (auto it = begin (all_window); it != end (all_window); ++it, ++index) {
         if (all_window[index] == window){
-            (*(Gui*) all_gui[index]).button = button;
-            (*(Gui*) all_gui[index]).action = action;
-            (*(Gui*) all_gui[index]).mods = mods;
-            (*(Gui*) all_gui[index]).mouse_button_callback();
+            (*(GLui*) all_gui[index]).button = button;
+            (*(GLui*) all_gui[index]).action = action;
+            (*(GLui*) all_gui[index]).mods = mods;
+            (*(GLui*) all_gui[index]).mouse_button_callback();
             break;
         }
     }
 }
 
-void Gui::mouse_button_callback()
+void GLui::mouse_button_callback()
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+        // zr::log("Left Button clicked at: " + std::to_string(cursor_xpos_wrt_window) + ", " + std::to_string(cursor_ypos_wrt_window));
+        glm::vec2 window_xy((float) cursor_xpos_wrt_window, (float) cursor_ypos_wrt_window);
+        button_actions_queue.push_back(std::tie<int, glm::vec2>(action, window_xy));
+        m_event.action = action;
+        m_event.button = button;
+        m_event.x = cursor_xpos_wrt_window;
+        m_event.y = cursor_ypos_wrt_window;
     }
 
-    cursor_xpos_wrt_board = cursor_xpos_wrt_window;
-    cursor_ypos_wrt_board = window_height - cursor_ypos_wrt_window;
-    zr::log("Left Button clicked at: " + std::to_string(cursor_xpos_wrt_board) + ", " + std::to_string(cursor_ypos_wrt_board));
-
+    zr::log("Known issue with window resize: Position doesn't diplay correctly after resize.");
 }
 
+glm::vec2 GLui::transform_xy_window_to_board(const GameBoard& board, glm::vec2 window_xy){
+
+    // board_xy = MATMUL (window_to_board_transformation, window_xy)
+    window_to_board_transformation[0][0] = 1;
+    window_to_board_transformation[0][1] = - board.board_margin;
+
+    window_to_board_transformation[1][0] = -1;
+    window_to_board_transformation[1][1] = window_height - board.board_margin;
+
+    zr::log("window x,y = " + std::to_string(window_xy.x) + ", " + std::to_string(window_xy.y));
+    glm::vec2 board_xy = glm::vec2(
+        (float) (window_to_board_transformation[0][0] * window_xy.x + window_to_board_transformation[0][1]),
+        (float) (window_to_board_transformation[1][0] * window_xy.y + window_to_board_transformation[1][1])
+    );
+    return board_xy;
+};
 
 
 
-int Gui::init_opengl(){
+int GLui::init_opengl(){
     zr::log_level = zr::VERBOSITY_LEVEL::DEBUG;
     if (!glfwInit()){
         zr::log("GLFW initialization failed.", zr::VERBOSITY_LEVEL::ERROR);
@@ -167,13 +201,13 @@ int Gui::init_opengl(){
     glfwSetCursorPosCallback(window, st_cursor_position_callback);
     glfwSetWindowSizeCallback(window, st_window_resize_callback);
 
-    Gui::all_gui.push_back(this);
-    Gui::all_window.push_back(window);
+    GLui::all_gui.push_back(this);
+    GLui::all_window.push_back(window);
 
     return 0;
 }
 
-int Gui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board){
+int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board){
         /* Render here || Make the draw calls here || Draw the models here*/
     // Render board
     {

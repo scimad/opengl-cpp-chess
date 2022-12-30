@@ -19,6 +19,7 @@ public:
     GameBoard(const std::string& shader_path, const std::string& texture_path);
     ~GameBoard();
     glm::vec3 get_translation_from_position(const std::string& chess_position) const;
+    std::string get_board_position_from_xy(glm::vec2 board_xy) const;
 };
 
 

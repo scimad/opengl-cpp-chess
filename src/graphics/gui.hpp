@@ -16,7 +16,19 @@ struct ChessGLConfig{
 
 };
 
-class Gui
+enum GLUI_DRAGDROP_STATES{
+    RELEASED,
+    CLICKED,
+    DRAGGING,
+};
+
+struct MouseEvent{
+    int button;
+    int action;
+    double x, y;
+};
+
+class GLui
 {
 private:
     int window_width;
@@ -27,18 +39,23 @@ private:
 
     bool is_window_resizable;
 
-    //window coordinate system: 0,0 on top left
+    // window coordinate system: 0,0 on top left
     double cursor_xpos_wrt_window, cursor_ypos_wrt_window;
 
-    //board coordinate system: 0,0 on mid of A1 square
-    double cursor_xpos_wrt_board, cursor_ypos_wrt_board;
+    // board coordinate system: 0,0 on bottom left of A1 square
+    // double cursor_xpos_wrt_board, cursor_ypos_wrt_board;
     int button, action, mods;
 
-    //
-    static Gui* get_gui_of_window(const GLFWwindow* window);
+    MouseEvent m_event;
+
+
+    // setting up a cartesian coordinate at bottom left of window
+    glm::mat2x2 window_to_board_transformation;
+
+    static GLui* get_gui_of_window(const GLFWwindow* window);
 
 public:
-    inline static std::vector<Gui*> all_gui {};
+    inline static std::vector<GLui*> all_gui {};
     inline static std::vector<GLFWwindow*> all_window {};
 
     GLFWwindow* gui_window; // IMPORTANT: Remember how you use this pointer ^1
@@ -54,6 +71,21 @@ public:
     void cursor_position_callback();
     void window_resize_callback();
 
+    // button action, x, y in cartesian system
+    std::vector<std::tuple<int, glm::vec2>> button_actions_queue;
+
+    void refresh_gl_inputs(){
+        glfwPollEvents();
+        if (glfwGetKey(gui_window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+            glfwSetWindowShouldClose(gui_window, true);
+        }
+
+        exit_flag = glfwWindowShouldClose(gui_window);
+    };
+
+    glm::vec2 transform_xy_window_to_board(const GameBoard& board, glm::vec2 window_xy);
+
+
     
 
     // The following matrices perform the described transformation:
@@ -64,8 +96,8 @@ public:
 
     glm::mat4 proj, view; //, model matrix should go on somewhere and mvp should go somewhere;
 
-    Gui(/* args */);
-    ~Gui();
+    GLui(/* args */);
+    ~GLui();
     int setup_opengl(); // setup opengl stuffs
     int init_opengl();  // init opengl stuffs
     int redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board);  //redraw opengl stuffs
