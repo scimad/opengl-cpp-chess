@@ -81,4 +81,5 @@ void ChessGame::run(){
     }
 
     glfwTerminate(); // Refer to the notes on README.md of this project
+    zr::log("OpenGL environment terminating gracefully.");
 }

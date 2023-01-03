@@ -10,5 +10,5 @@ ChessPiece::ChessPiece(const std::string& shader_path, const std::string& textur
 
 ChessPiece::~ChessPiece()
 {
-    zr::log("Chess piece freed from memory");
+    zr::log("Chess piece freed from memory.", zr::VERBOSITY_LEVEL::DEBUG);
 }

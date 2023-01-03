@@ -18,6 +18,6 @@ bool GLIsErrorFree(const char* function, const char* file, int line){
     return is_error_free;
 }
 
-Color::Color(){zr::log("Hello");};
+Color::Color(){};
 Color::Color(float r, float g, float b, float a):r(r),g(g),b(b),a(a){};
 

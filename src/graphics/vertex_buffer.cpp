@@ -14,17 +14,17 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size){
         GLCALL(glGenBuffers(1, &rendererID));
         GLCALL(glBindBuffer(GL_ARRAY_BUFFER, rendererID));
         GLCALL(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
-        zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " created.");
+        zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " created.", zr::VERBOSITY_LEVEL::DEBUG);
     // }
 
 };
 VertexBuffer::~VertexBuffer(){
-    zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " deleted.");
+    zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " deleted.", zr::VERBOSITY_LEVEL::DEBUG);
     GLCALL(glDeleteBuffers(1, &rendererID));
 };
 
 void VertexBuffer::bind() const{
-    zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " binded.");
+    zr::log("VertexBuffer with ID " + std::to_string(rendererID) + " binded.", zr::VERBOSITY_LEVEL::DEBUG);
     GLCALL(glBindBuffer(GL_ARRAY_BUFFER, rendererID));
 };
 

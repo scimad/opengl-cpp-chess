@@ -123,8 +123,6 @@ void GLui::mouse_button_callback()
         m_event.x = cursor_xpos_wrt_window;
         m_event.y = cursor_ypos_wrt_window;
     }
-
-    zr::log("Known issue with window resize: Position doesn't diplay correctly after resize.");
 }
 
 glm::vec2 GLui::transform_xy_window_to_board(const GameBoard& board, glm::vec2 window_xy){
@@ -136,7 +134,7 @@ glm::vec2 GLui::transform_xy_window_to_board(const GameBoard& board, glm::vec2 w
     window_to_board_transformation[1][0] = -1;
     window_to_board_transformation[1][1] = window_height - board.board_margin;
 
-    zr::log("window x,y = " + std::to_string(window_xy.x) + ", " + std::to_string(window_xy.y));
+    zr::log("window x,y = " + std::to_string(window_xy.x) + ", " + std::to_string(window_xy.y), zr::VERBOSITY_LEVEL::DEBUG);
     glm::vec2 board_xy = glm::vec2(
         (float) (window_to_board_transformation[0][0] * window_xy.x + window_to_board_transformation[0][1]),
         (float) (window_to_board_transformation[1][0] * window_xy.y + window_to_board_transformation[1][1])
@@ -147,12 +145,11 @@ glm::vec2 GLui::transform_xy_window_to_board(const GameBoard& board, glm::vec2 w
 
 
 int GLui::init_opengl(){
-    zr::log_level = zr::VERBOSITY_LEVEL::DEBUG;
     if (!glfwInit()){
         zr::log("GLFW initialization failed.", zr::VERBOSITY_LEVEL::ERROR);
         return -1;
     }
-    zr::log("Successfully initialized GLFW.");
+    zr::log("Successfully initialized GLFW.", zr::VERBOSITY_LEVEL::DEBUG);
 
     if (!is_window_resizable){
         GLCALL(glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE));
@@ -176,7 +173,7 @@ int GLui::init_opengl(){
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     gui_window = window;            // This code somehow needs to be at the end of the function.
-    zr::log("Successfully created GLFW window.");
+    zr::log("Successfully created GLFW window.", zr::VERBOSITY_LEVEL::INFO);
 
     // gui_window = window;
 
@@ -185,12 +182,12 @@ int GLui::init_opengl(){
     // Initialize GLEW
     GLenum err = glewInit();                      //Must do after glfwMakeContextCurrent() or alternatively after properly initializing GLUT
     if (GLEW_OK != err){
-        zr::log("Failed to initialize GLEW. Err: " + std::string((const char*)(glewGetErrorString(err))), zr::VERBOSITY_LEVEL::WARNING);
+        zr::log("Failed to initialize GLEW. Err: " + std::string((const char*)(glewGetErrorString(err))), zr::VERBOSITY_LEVEL::ERROR);
         glfwTerminate();
         return -1;
     }
-    zr::log("Successfully initialized GLEW.");
-    zr::log("OpenGL Version: " + std::string((const char*) glGetString(GL_VERSION)));
+    zr::log("Successfully initialized GLEW.", zr::VERBOSITY_LEVEL::DEBUG);
+    zr::log("OpenGL Version: " + std::string((const char*) glGetString(GL_VERSION)), zr::VERBOSITY_LEVEL::INFO);
 
     // This gives transparency to transparent regions of pngs
     GLCALL(glEnable(GL_BLEND));

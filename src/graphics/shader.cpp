@@ -101,7 +101,7 @@ GLuint Shader::createShader(const std::string& vert_shader, const std::string& f
 
     glDeleteShader(vs_handle);
     glDeleteShader(fs_handle);
-    zr::log("Shader program with ID " + std::to_string(program_handle) + " created.");
+    zr::log("Shader program with ID " + std::to_string(program_handle) + " created.", zr::VERBOSITY_LEVEL::DEBUG);
     return program_handle;
 }
 

@@ -42,7 +42,7 @@ std::string GameBoard::get_board_position_from_xy(glm::vec2 board_xy) const {
     double x_pos_wrt_board = board_xy.x;
     double y_pos_wrt_board = board_xy.y;
     std::string position = "";
-    zr::log("Board x, board y  = " + std::to_string(x_pos_wrt_board) + ", "+ std::to_string(y_pos_wrt_board));
+    zr::log("x, y (with respect to board)  = " + std::to_string(x_pos_wrt_board) + ", "+ std::to_string(y_pos_wrt_board), zr::VERBOSITY_LEVEL::DEBUG);
     if (x_pos_wrt_board >= 0 && x_pos_wrt_board < 8 * square_length && y_pos_wrt_board >= 0 && y_pos_wrt_board <  8 * square_length){
         char file = (char)((int)(x_pos_wrt_board / (double) square_length) + 65);         // ASCII of 'A' is 65
         int rank = (int)(y_pos_wrt_board / (double) square_length) + 1;
