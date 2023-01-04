@@ -42,6 +42,8 @@ ChessGame::ChessGame():
     pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", "A8"));
     pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", "H8"));
 
+    game_state.selected_position = BoardPosition::InvalidPosition;
+
 }
 
 // ChessGame::ChessGame(GameState current_state){
@@ -55,13 +57,14 @@ ChessGame::~ChessGame(){
 }
 
 void ChessGame::process_requests() {
-    std::string position = "";
+    std::string position_str = "";
     for (auto clickevent : glui.button_actions_queue){
         glm::vec2 board_xy = glui.transform_xy_window_to_board(board, std::get<1>(clickevent));
-        std::string position = board.get_board_position_from_xy(board_xy);
+        BoardPosition position = board.get_board_position_from_xy(board_xy);
 
-        if (position != ""){
-            zr::log("Selecting " + position);
+        if (position != BoardPosition::InvalidPosition){
+            zr::log("Selecting " + board.get_position_str(position));
+            game_state.selected_position = A1;
         }
     }
 
@@ -69,7 +72,8 @@ void ChessGame::process_requests() {
 }
 
 void ChessGame::run(){
-    // Utility variables
+
+    zr::log(get_color_name(game_state.current_player) + " color player to make a move.", zr::VERBOSITY_LEVEL::INFO);
 
     /* Loop until the user closes the window */
     while (!glui.exit_flag || (*this).end_and_exit){
@@ -82,4 +86,24 @@ void ChessGame::run(){
 
     glfwTerminate(); // Refer to the notes on README.md of this project
     zr::log("OpenGL environment terminating gracefully.");
+}
+
+
+
+GameState::GameState() :
+    paused(true),
+    current_player(ChessColors::LIGHT),
+    selected_position(BoardPosition::InvalidPosition),
+    total_moves_count(0),
+    irreversible_moves_count(0),
+    repeated_moves_count(0),
+    is_checked(false),
+    is_white_castled(false),
+    is_black_castled(false)
+{
+    zr::log("New game started.", zr::INFO);
+}
+
+GameState::~GameState()
+{
 }

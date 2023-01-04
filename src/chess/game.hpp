@@ -6,20 +6,24 @@
 
 #include "graphics/gui.hpp"
 
-enum ChessColors{
+typedef enum {
     LIGHT = 0,
     DARK = 1
-};
-
-typedef ChessColors Player;
+} ChessColors;
 
 class GameState{
+public:
+    bool paused;
     bool is_checked;
-    Player current_player;
+    ChessColors current_player;
     bool is_white_castled;
     bool is_black_castled;
-    unsigned int irreversible_move_count;
+    unsigned int total_moves_count;
+    unsigned int irreversible_moves_count;
     unsigned int repeated_moves_count;
+    BoardPosition selected_position;
+    GameState();
+    ~GameState();
 };
 
 class ChessTimer{};
@@ -27,8 +31,10 @@ class GameHistory{};
 
 class ChessGame{
 private:
-    // ChessOpenGLEnv gui;
-    GameState current_state;
+    const std::vector<std::string> color_names = { "LIGHT", "DARK" };
+    inline std::string get_color_name(ChessColors chess_color){
+        return color_names[chess_color];
+    };
 
 public:
     GLui glui;
@@ -36,6 +42,7 @@ public:
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
     GameBoard board;
+    GameState game_state;
 
     // ChessTimer timer;
     // GameHistory history;

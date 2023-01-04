@@ -157,7 +157,7 @@ int GLui::init_opengl(){
         GLCALL(glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE));
     }
 
-    // Choose OpenGL version and setup either compatibility profile or core profile 
+    // Choose OpenGL version and setup either compatibility profile or core profile
     GLCALL(glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3));
     GLCALL(glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3));
     GLCALL(glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE));      // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
