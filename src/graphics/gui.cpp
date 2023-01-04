@@ -82,19 +82,8 @@ void GLui::st_window_resize_callback(GLFWwindow* window, int width, int height){
 
 void GLui::window_resize_callback(){
     // If anything needs to be done that window specific.
-    // TODO: update the coordinate transformation matrix between window and board
-
-
     // if re-scaling is enabled, we need a scaling transformation as well
-
     // for no-scaling, only change of origin / axes is needed.
-
-
-
-
-
-
-
 
 }
 

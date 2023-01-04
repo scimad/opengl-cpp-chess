@@ -66,6 +66,8 @@ void ChessGame::process_requests() {
             zr::log("Selecting " + board.get_position_str(position));
             game_state.selected_position = A1;
         }
+
+        // TODO: Find the piece based on the position and continue gameplay
     }
 
     glui.button_actions_queue.clear();
