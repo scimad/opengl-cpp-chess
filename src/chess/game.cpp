@@ -56,6 +56,13 @@ ChessGame::~ChessGame(){
     }
 }
 
+ChessPiece* ChessGame::get_piece_at_position(BoardPosition position){
+    for (ChessPiece* chess_piece : pieces){
+        if ((*chess_piece).position == position)
+            return chess_piece;
+    }
+}
+
 void ChessGame::process_requests() {
     for (auto clickevent : glui.button_actions_queue){
         glm::vec2 board_xy = glui.transform_xy_window_to_board(board, std::get<1>(clickevent));
@@ -72,6 +79,10 @@ void ChessGame::process_requests() {
             zr::log("Selecting " + board.get_position_str(position));
 
             // TODO: Find the piece based on the position and continue gameplay
+            {
+                ChessPiece* selected_piece = get_piece_at_position(position);
+                // zr::log("Selected piece is a : " + std::string(selected_piece->get_name_by_piece))
+            }
 
 
         }else{

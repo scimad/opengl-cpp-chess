@@ -6,11 +6,6 @@
 
 #include "graphics/gui.hpp"
 
-typedef enum {
-    LIGHT = 0,
-    DARK = 1
-} ChessColors;
-
 class GameState{
 public:
     bool paused;
@@ -37,6 +32,7 @@ private:
     inline std::string get_color_name(ChessColors chess_color){
         return color_names[chess_color];
     };
+    ChessPiece* get_piece_at_position(BoardPosition position);
 
 public:
     GLui glui;

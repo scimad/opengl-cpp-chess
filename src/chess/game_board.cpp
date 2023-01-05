@@ -52,8 +52,8 @@ BoardPosition GameBoard::get_board_position_from_xy(glm::vec2 board_xy) const {
     BoardPosition position = BoardPosition::InvalidPosition;
     zr::log("x, y (with respect to board)  = " + std::to_string(x_pos_wrt_board) + ", "+ std::to_string(y_pos_wrt_board), zr::VERBOSITY_LEVEL::DEBUG);
     if (x_pos_wrt_board >= 0 && x_pos_wrt_board < 8 * square_length && y_pos_wrt_board >= 0 && y_pos_wrt_board <  8 * square_length){
-        int file_num = (int)(x_pos_wrt_board / (double) square_length);         // 'A' file is 1
-        int rank_num = (int)(y_pos_wrt_board / (double) square_length);             //  1 rank is 1
+        int file_num = (int)(x_pos_wrt_board / (double) square_length);         // 'A' file gives file_num = 0
+        int rank_num = (int)(y_pos_wrt_board / (double) square_length);         //  1 rank gives rank_num = 0
         position = (BoardPosition) (rank_num * 8 + file_num);
     }
     return position;
