@@ -41,6 +41,14 @@ public:
         return pos_string[pos];
     }
 
+    static inline unsigned int get_file_num(BoardPosition pos){
+        return ((int) pos) % 8 + 1;
+    }
+
+    static inline unsigned int get_rank_num(BoardPosition pos){
+        return ((int) pos) / 8 + 1;
+    }
+
     static inline BoardPosition get_position_from_str(std::string pos_str){
         int index = 0;
         while (index <= 64){
