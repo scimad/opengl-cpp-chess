@@ -46,6 +46,8 @@ public:
         // TODO: WRITE LEGAL MOVE LOGIC
         return true;
     };
+    void move(BoardPosition from, BoardPosition to);
+    void capture(BoardPosition by, BoardPosition at);
 
     // ChessTimer timer;
     // GameHistory history;
