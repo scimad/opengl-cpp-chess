@@ -83,15 +83,32 @@ void ChessGame::process_requests() {
 
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
-                zr::log("Selected piece at " + board.get_position_str(position) + " is: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str() + ".");
+                if (game_state.current_player == (*selected_piece).color){
+                    zr::log("Move my " + board.get_position_str(position) + " " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str() + ".");
+                    game_state.move_from = position;
+                }
+                else
+                {
+                    if (game_state.move_from != InvalidPosition){ // Make move
+                        zr::log("Capture " + board.get_position_str(position) + " " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str() + ".");
+                    }
+                }
             }else{
-                zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
+                if (game_state.move_from != InvalidPosition){ // Make move
+                    zr::log("Move to empty square " + board.get_position_str(position) + ".");
+                    game_state.move_to = position;
+                    if (is_legal_move(game_state.move_from, game_state.move_to)){
+                        ChessPiece* moving_piece = get_piece_at_position(game_state.move_from);
+                        moving_piece->position = game_state.move_to;
+                        game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
+                        game_state.move_from = InvalidPosition;
+                        game_state.move_to = InvalidPosition;
+                    }
+                }
             }
-
+            
         }else{
-            if (touch_to_move_rule == false){
-                game_state.move_from = InvalidPosition;
-            }
+            game_state.move_from = InvalidPosition;
         }
 
     }

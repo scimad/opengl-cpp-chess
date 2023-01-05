@@ -42,6 +42,10 @@ public:
     GameBoard board;
     bool touch_to_move_rule;
     GameState game_state;
+    bool is_legal_move(BoardPosition from, BoardPosition to){
+        // TODO: WRITE LEGAL MOVE LOGIC
+        return true;
+    };
 
     // ChessTimer timer;
     // GameHistory history;
