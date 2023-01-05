@@ -12,35 +12,35 @@ ChessGame::ChessGame():
     //8 light pawns and 8 dark pawns
     for (size_t i=0; i< 8; i++)
     {
-        pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_plt45.svg.png", board.get_position_from_str(std::string({char(65+i), '2'}))));
-        pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_pdt45.svg.png", board.get_position_from_str(std::string({char(65+i), '7'}))));
+        pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_plt45.svg.png", LIGHT, PAWN, board.get_position_from_str(std::string({char(65+i), '2'}))));
+        pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_pdt45.svg.png", DARK, PAWN, board.get_position_from_str(std::string({char(65+i), '7'}))));
     }
 
     //light Queen and dark Queen
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_qlt45.svg.png", D1));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_qdt45.svg.png", D8));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_qlt45.svg.png", LIGHT, QUEEN, D1));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_qdt45.svg.png", DARK, QUEEN, D8));
 
-    //light Kind and dark King
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_klt45.svg.png", E1));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_kdt45.svg.png", E8));
+    //light King and dark King
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_klt45.svg.png", LIGHT, KING, E1));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_kdt45.svg.png", DARK, KING, E8));
 
     //2 light bishops and 2 dark bishops
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_blt45.svg.png", C1));
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_blt45.svg.png", F1));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_bdt45.svg.png", C8));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_bdt45.svg.png", F8));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_blt45.svg.png", LIGHT, BISHOP, C1));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_blt45.svg.png", LIGHT, BISHOP, F1));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_bdt45.svg.png", DARK, BISHOP, C8));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_bdt45.svg.png", DARK, BISHOP, F8));
 
     //2 light knights and 2 dark knights
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_nlt45.svg.png", B1));
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_nlt45.svg.png", G1));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_ndt45.svg.png", B8));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_ndt45.svg.png", G8));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_nlt45.svg.png", LIGHT, KNIGHT, B1));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_nlt45.svg.png", LIGHT, KNIGHT, G1));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_ndt45.svg.png", DARK, KNIGHT, B8));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_ndt45.svg.png", DARK, KNIGHT, G8));
 
     //2 light rooks and 2 dark rooks
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_rlt45.svg.png", A1));
-    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_rlt45.svg.png", H1));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", A8));
-    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", H8));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_rlt45.svg.png", LIGHT, ROOK, A1));
+    pieces.push_back(new ChessPiece("../res/light.shader", "../assets/Chess_rlt45.svg.png", LIGHT, ROOK, H1));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", DARK, ROOK, A8));
+    pieces.push_back(new ChessPiece("../res/dark.shader", "../assets/Chess_rdt45.svg.png", DARK, ROOK,H8));
 
     game_state.selected_position = BoardPosition::InvalidPosition;
 
@@ -58,8 +58,10 @@ ChessGame::~ChessGame(){
 
 ChessPiece* ChessGame::get_piece_at_position(BoardPosition position){
     for (ChessPiece* chess_piece : pieces){
-        if ((*chess_piece).position == position)
+        zr::log(chess_piece->get_name_str() + " is at "  + board.get_position_str(chess_piece->position), zr::VERBOSITY_LEVEL::DEBUG);
+        if ((*chess_piece).position == position){
             return chess_piece;
+        }
     }
     return nullptr;
 }
@@ -82,9 +84,12 @@ void ChessGame::process_requests() {
             // TODO: Find the piece based on the position and continue gameplay
             {
                 ChessPiece* selected_piece = get_piece_at_position(position);
-                // zr::log("Selected piece is a : " + std::string(selected_piece->get_name_by_piece))
+                if (selected_piece != nullptr){
+                    zr::log("Selected piece is a: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
+                }else{
+                    zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
+                }
             }
-
 
         }else{
             if (touch_to_move_rule == false){
