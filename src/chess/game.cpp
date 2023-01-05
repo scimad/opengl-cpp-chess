@@ -81,10 +81,9 @@ void ChessGame::process_requests() {
                 // TODO: Start ChessTimer
             }
 
-            zr::log("Selecting " + board.get_position_str(position));
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
-                zr::log("Selected piece is a: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
+                zr::log("Selected piece at " + board.get_position_str(position) + " is: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
             }else{
                 zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
             }
