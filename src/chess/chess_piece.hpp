@@ -3,12 +3,12 @@
 
 #include "graphics/model.hpp"
 
-#include <string>
+#include "chess/game_board.hpp"
 
 class ChessPiece : public DrawableModel{
 public:
-    ChessPiece(const std::string& shader_path, const std::string& texture_path, std::string board_position="");
-    std::string position;
+    ChessPiece(const std::string& shader_path, const std::string& texture_path, BoardPosition board_position = InvalidPosition);
+    BoardPosition position;
 
     ~ChessPiece();
 

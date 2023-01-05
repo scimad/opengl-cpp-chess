@@ -23,7 +23,10 @@ GameBoard::~GameBoard()
 {
 }
 
-glm::vec3 GameBoard::get_translation_from_position(const std::string& chess_position) const {
+glm::vec3 GameBoard::get_translation_from_position(const BoardPosition& position) const {
+    // TODO: We can return this without using string operations
+    // TODO: Completely remove string based positionining system
+    std::string chess_position = get_position_str(position);
     glm::vec3 center_of_A1(
                 (float) board_margin + (float) square_length/2.0,
                 (float) board_margin + (float) square_length/2.0,
@@ -31,11 +34,11 @@ glm::vec3 GameBoard::get_translation_from_position(const std::string& chess_posi
     char file = chess_position.c_str()[0];  //Assuming uppercase
     char rank = chess_position.c_str()[1];
 
-    glm::vec3 position = center_of_A1 + glm::vec3(
+    glm::vec3 t_vec = center_of_A1 + glm::vec3(
         ((int) file - (int) 'A') * (float) square_length,        // ASCII of 'A' is 65
         ((int) rank - (int) '1') * (float) square_length,        // ASCII of '1' is 49
         0);
-    return position;
+    return t_vec;
 }
 
 std::string GameBoard::get_board_position_str_from_xy(glm::vec2 board_xy) const {

@@ -22,6 +22,8 @@ public:
     unsigned int irreversible_moves_count;
     unsigned int repeated_moves_count;
     BoardPosition selected_position;
+    BoardPosition move_from;
+    BoardPosition move_to;
     GameState();
     ~GameState();
 };
@@ -42,6 +44,7 @@ public:
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
     GameBoard board;
+    bool touch_to_move_rule;
     GameState game_state;
 
     // ChessTimer timer;
