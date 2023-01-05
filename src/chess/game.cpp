@@ -72,6 +72,7 @@ void ChessGame::process_requests() {
         BoardPosition position = board.get_board_position_from_xy(board_xy);
         game_state.selected_position = position;
 
+        // TODO: Continue gameplay by checking game_state
         if (position != BoardPosition::InvalidPosition){
             // start game
             if (game_state.paused == true){
@@ -79,16 +80,13 @@ void ChessGame::process_requests() {
                 zr::log("Game timer started");
                 // TODO: Start ChessTimer
             }
-            zr::log("Selecting " + board.get_position_str(position));
 
-            // TODO: Find the piece based on the position and continue gameplay
-            {
-                ChessPiece* selected_piece = get_piece_at_position(position);
-                if (selected_piece != nullptr){
-                    zr::log("Selected piece is a: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
-                }else{
-                    zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
-                }
+            zr::log("Selecting " + board.get_position_str(position));
+            ChessPiece* selected_piece = get_piece_at_position(position);
+            if (selected_piece != nullptr){
+                zr::log("Selected piece is a: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
+            }else{
+                zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
             }
 
         }else{
@@ -96,6 +94,7 @@ void ChessGame::process_requests() {
                 game_state.move_from = InvalidPosition;
             }
         }
+
     }
 
     glui.button_actions_queue.clear();
