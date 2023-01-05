@@ -91,6 +91,20 @@ void ChessGame::process_requests() {
                 {
                     if (game_state.move_from != InvalidPosition){ // Make move
                         zr::log("Capture " + board.get_position_str(position) + " " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str() + ".");
+                        game_state.move_to = position;
+                        if (is_legal_move(game_state.move_from, game_state.move_to)){
+                            {   // TODO: Implement a capture function
+                                ChessPiece* moving_piece = get_piece_at_position(game_state.move_from);
+                                (*selected_piece).position = InvalidPosition;
+                                (*selected_piece).status = DEAD;
+                                {   //TODO: Implement a move function
+                                    (*moving_piece).position = game_state.move_to;
+                                    game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
+                                    game_state.move_from = InvalidPosition;
+                                    game_state.move_to = InvalidPosition;
+                                }
+                            }
+                        }
                     }
                 }
             }else{
@@ -98,15 +112,16 @@ void ChessGame::process_requests() {
                     zr::log("Move to empty square " + board.get_position_str(position) + ".");
                     game_state.move_to = position;
                     if (is_legal_move(game_state.move_from, game_state.move_to)){
-                        ChessPiece* moving_piece = get_piece_at_position(game_state.move_from);
-                        moving_piece->position = game_state.move_to;
-                        game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
-                        game_state.move_from = InvalidPosition;
-                        game_state.move_to = InvalidPosition;
+                        {   // TODO: Place the following code in the move function
+                            ChessPiece* moving_piece = get_piece_at_position(game_state.move_from);
+                            (*moving_piece).position = game_state.move_to;
+                            game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
+                            game_state.move_from = InvalidPosition;
+                            game_state.move_to = InvalidPosition;
+                        }
                     }
                 }
             }
-            
         }else{
             game_state.move_from = InvalidPosition;
         }

@@ -19,6 +19,11 @@ typedef enum {
     KING
 } PieceType;
 
+typedef enum {
+    ALIVE,
+    DEAD
+} LifeStatus;
+
 
 class ChessPiece : public DrawableModel{
 private:
@@ -29,6 +34,7 @@ public:
     BoardPosition position;
     ChessColors color;
     PieceType type;
+    LifeStatus status;
     inline std::string get_color_str(){
         return color_name[(unsigned int) color];
     };
