@@ -20,6 +20,8 @@ if(${glfw3_FOUND})
     MESSAGE("[ZR]: GLFW3 link libraries = " ${glfw3_LINK_LIBRARIES})
 endif()
 
+target_compile_features(opengl-chess PRIVATE cxx_std_17)
+
 include_directories(src/
                     vendor/include
                     vendor/include/imgui/
