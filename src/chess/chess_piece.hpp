@@ -27,8 +27,8 @@ typedef enum {
 
 class ChessPiece : public DrawableModel{
 private:
-    const std::vector<std::string> piece_name = {"PAWN", "ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING"};
-    const std::vector<std::string> color_name = {"LIGHT", "DARK"};
+    inline static const std::vector<std::string> piece_name = {"PAWN", "ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING"};
+    inline static const std::vector<std::string> color_name = {"LIGHT", "DARK"};
 public:
     ChessPiece(const std::string& shader_path, const std::string& texture_path, ChessColors color, PieceType type, BoardPosition board_position = InvalidPosition);
     BoardPosition position;
