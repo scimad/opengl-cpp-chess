@@ -104,7 +104,7 @@ void GLui::st_mouse_button_callback(GLFWwindow* window, int button, int action, 
 void GLui::mouse_button_callback()
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
-        // zr::log("Left Button clicked at: " + std::to_string(cursor_xpos_wrt_window) + ", " + std::to_string(cursor_ypos_wrt_window));
+        // zr::log("Left Button clicked at: " + std::to_string(cursor_xpos_wrt_window) + ", " + std::to_string(cursor_ypos_wrt_window) + ".");
         glm::vec2 window_xy((float) cursor_xpos_wrt_window, (float) cursor_ypos_wrt_window);
         button_actions_queue.push_back(std::tie<int, glm::vec2>(action, window_xy));
         m_event.action = action;
@@ -123,7 +123,7 @@ glm::vec2 GLui::transform_xy_window_to_board(const GameBoard& board, glm::vec2 w
     window_to_board_transformation[1][0] = -1;
     window_to_board_transformation[1][1] = window_height - board.board_margin;
 
-    zr::log("window x,y = " + std::to_string(window_xy.x) + ", " + std::to_string(window_xy.y), zr::VERBOSITY_LEVEL::DEBUG);
+    zr::log("window x,y = " + std::to_string(window_xy.x) + ", " + std::to_string(window_xy.y) + ".", zr::VERBOSITY_LEVEL::DEBUG);
     glm::vec2 board_xy = glm::vec2(
         (float) (window_to_board_transformation[0][0] * window_xy.x + window_to_board_transformation[0][1]),
         (float) (window_to_board_transformation[1][0] * window_xy.y + window_to_board_transformation[1][1])

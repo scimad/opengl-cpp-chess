@@ -58,7 +58,7 @@ ChessGame::~ChessGame(){
 
 ChessPiece* ChessGame::get_piece_at_position(BoardPosition position){
     for (ChessPiece* chess_piece : pieces){
-        zr::log(chess_piece->get_name_str() + " is at "  + board.get_position_str(chess_piece->position), zr::VERBOSITY_LEVEL::DEBUG);
+        zr::log(chess_piece->get_name_str() + " is at "  + board.get_position_str(chess_piece->position) + ".", zr::VERBOSITY_LEVEL::DEBUG);
         if ((*chess_piece).position == position){
             return chess_piece;
         }
@@ -77,13 +77,13 @@ void ChessGame::process_requests() {
             // start game
             if (game_state.paused == true){
                 game_state.paused = false;
-                zr::log("Game timer started");
+                zr::log("Game timer started.");
                 // TODO: Start ChessTimer
             }
 
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
-                zr::log("Selected piece at " + board.get_position_str(position) + " is: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str());
+                zr::log("Selected piece at " + board.get_position_str(position) + " is: " + (*selected_piece).get_color_str() + " " + (*selected_piece).get_name_str() + ".");
             }else{
                 zr::log(board.get_position_str(position)  + " is an empty square.", zr::VERBOSITY_LEVEL::INFO);
             }

@@ -13,7 +13,7 @@ bool GLIsErrorFree(const char* function, const char* file, int line){
         is_error_free = false;
     }
     if (is_error_free == false){
-        zr::log("OpenGL found some error!!!!!");
+        zr::log("OpenGL found some error!");
     }
     return is_error_free;
 }
