@@ -37,11 +37,11 @@ public:
     int square_length;
     float window_to_board_ratio;
 
-    inline std::string get_position_str(BoardPosition pos) const{
+    static inline std::string get_position_str(BoardPosition pos){
         return pos_string[pos];
     }
 
-    inline BoardPosition get_position_from_str(std::string pos_str) const{
+    static inline BoardPosition get_position_from_str(std::string pos_str){
         int index = 0;
         while (index <= 64){
             if (pos_string[index] == pos_str){
