@@ -61,6 +61,7 @@ ChessPiece* ChessGame::get_piece_at_position(BoardPosition position){
         if ((*chess_piece).position == position)
             return chess_piece;
     }
+    return nullptr;
 }
 
 void ChessGame::process_requests() {

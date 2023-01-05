@@ -16,7 +16,7 @@ typedef enum {
     KNIGHT,
     BISHOP,
     QUEEN,
-    KING    
+    KING
 } PieceType;
 
 
