@@ -46,4 +46,40 @@ public:
 
 };
 
+// class PawnPiece : public ChessPiece {
+// public:
+//     PawnPiece();
+//     ~PawnPiece();
+// };
+
+// class RookPiece : public ChessPiece {
+// public:
+//     RookPiece();
+//     ~RookPiece();
+// };
+
+// class KnightPiece : public ChessPiece {
+// public:
+//     KnightPiece();
+//     ~KnightPiece();
+// };
+
+// class BishopPiece : public ChessPiece {
+// public:
+//     BishopPiece();
+//     ~BishopPiece();
+// };
+
+// class QueenPiece : public ChessPiece {
+// public:
+//     QueenPiece();
+//     ~QueenPiece();
+// };
+
+// class KingPiece : public ChessPiece {
+// public:
+//     KingPiece();
+//     ~KingPiece();
+// };
+
 #endif // __CHESS_PIECE_HPP
