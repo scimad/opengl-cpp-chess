@@ -136,6 +136,28 @@ void ChessGame::run(){
     zr::log("OpenGL environment terminating gracefully.");
 }
 
+bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
+    bool is_move_valid = true;
+    // TODO: WRITE LEGAL MOVE LOGIC
+    ChessPiece* moving_piece = get_piece_at_position(from);
+
+    unsigned int file_from = GameBoard::get_file_num(from);
+    unsigned int rank_from = GameBoard::get_rank_num(from);
+
+    unsigned int file_to = GameBoard::get_file_num(to);
+    unsigned int rank_to = GameBoard::get_rank_num(to);
+
+    switch ((*moving_piece).type)
+    {
+    case PAWN:
+        break;
+    default:
+        break;
+    }
+
+    return is_move_valid;
+};
+
 void ChessGame::move(BoardPosition from, BoardPosition to){
     ChessPiece* moving_piece = get_piece_at_position(from);
     (*moving_piece).position = to;
