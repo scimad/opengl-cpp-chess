@@ -45,6 +45,7 @@ public:
     bool is_legal_move(BoardPosition from, BoardPosition to);
     void move(BoardPosition from, BoardPosition to);
     void capture(BoardPosition by, BoardPosition at);
+    std::vector<BoardPosition> get_valid_moves(BoardPosition position);
 
     // ChessTimer timer;
     // GameHistory history;

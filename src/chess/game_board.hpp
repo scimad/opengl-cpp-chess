@@ -7,6 +7,12 @@
 
 #include <string>
 
+typedef enum{
+    A = 1, B, C, D, E, F, G, H
+} BoardFile;
+
+typedef unsigned int BoardRank;
+
 typedef enum {
     A1, B1, C1, D1, E1, F1, G1, H1,
     A2, B2, C2, D2, E2, F2, G2, H2,
@@ -41,12 +47,12 @@ public:
         return pos_string[pos];
     }
 
-    static inline unsigned int get_file_num(BoardPosition pos){
-        return ((int) pos) % 8 + 1;
+    static inline BoardFile get_file(BoardPosition pos){
+        return (BoardFile) (((int) pos) % 8 + 1);
     }
 
-    static inline unsigned int get_rank_num(BoardPosition pos){
-        return ((int) pos) / 8 + 1;
+    static inline BoardRank get_rank(BoardPosition pos){
+        return (BoardRank) (((int) pos) / 8 + 1);
     }
 
     static inline BoardPosition get_position_from_str(std::string pos_str){

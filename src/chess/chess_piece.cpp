@@ -5,7 +5,8 @@ ChessPiece::ChessPiece(const std::string& shader_path, const std::string& textur
     :   DrawableModel(shader_path, texture_path),
         color(color),
         type(type),
-        position(board_position)
+        position(board_position),
+        has_not_moved_yet(true)
 {
 
 }

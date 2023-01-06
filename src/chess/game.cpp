@@ -83,11 +83,12 @@ void ChessGame::process_requests() {
 
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
-                if (game_state.current_player == (*selected_piece).color){
+                if (game_state.current_player == (*selected_piece).color){  // Choosing a piece to move
                     zr::log("Player " + (*selected_piece).get_color_str() +
                             ": Move my " + board.get_position_str(position) +
                             " " + (*selected_piece).get_name_str() + ".");
                     game_state.move_from = position;
+                    get_valid_moves(position);
                 }
                 else
                 {
@@ -136,25 +137,65 @@ void ChessGame::run(){
     zr::log("OpenGL environment terminating gracefully.");
 }
 
-bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
-    bool is_move_valid = true;
-    // TODO: WRITE LEGAL MOVE LOGIC
+std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
     ChessPiece* moving_piece = get_piece_at_position(from);
 
-    unsigned int file_from = GameBoard::get_file_num(from);
-    unsigned int rank_from = GameBoard::get_rank_num(from);
+    unsigned int file_from = GameBoard::get_file(from);
+    unsigned int rank_from = GameBoard::get_rank(from);
 
-    unsigned int file_to = GameBoard::get_file_num(to);
-    unsigned int rank_to = GameBoard::get_rank_num(to);
+    // unsigned int file_to = GameBoard::get_file(to);
+    // unsigned int rank_to = GameBoard::get_rank(to);
 
-    switch ((*moving_piece).type)
+    std::vector<BoardPosition> valid_moves;
+
+    BoardPosition possible_to;
+    switch ((*moving_piece).type)   // (*moving_piece).
     {
     case PAWN:
+        {
+            int direction = 1 - 2 * (int) (*moving_piece).color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+            // One step move rule
+            possible_to = (BoardPosition) ((int) from + direction * 8);
+            valid_moves.push_back(possible_to);
+            // Two step move rule
+            if ((*moving_piece).has_not_moved_yet){
+                possible_to = (BoardPosition) ((int) from + direction * 16);
+                valid_moves.push_back(possible_to);
+            }
+            // Capture rule
+            if (((*moving_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::H) || (((*moving_piece).color == DARK && GameBoard::get_file(from) != BoardFile::A))){
+                possible_to = (BoardPosition) ((int) from + direction * 8 + 1);
+                ChessPiece* target_piece = get_piece_at_position(possible_to);
+                if (target_piece){
+                    if ((*target_piece).color != (*moving_piece).color)
+                    valid_moves.push_back(possible_to);
+                }
+            }
+
+            if (((*moving_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::A) || (((*moving_piece).color == DARK && GameBoard::get_file(from) != BoardFile::H))){
+                possible_to = (BoardPosition) ((int) from + direction * 8 - 1);
+                ChessPiece* target_piece = get_piece_at_position(possible_to);
+                if (target_piece){
+                    if ((*target_piece).color != (*moving_piece).color)
+                    valid_moves.push_back(possible_to);
+                }
+            }
+            // En-passant rule
+            // TODO: Contiune from here
+            for (BoardPosition pos : valid_moves){
+                zr::log("Possible move: " + GameBoard::get_position_str(pos));
+            }
+        }
         break;
     default:
         break;
     }
+    return valid_moves;
+}
 
+bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
+    bool is_move_valid = true;
+    // TODO: WRITE LEGAL MOVE LOGIC
     return is_move_valid;
 };
 
@@ -164,6 +205,7 @@ void ChessGame::move(BoardPosition from, BoardPosition to){
     game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
     game_state.move_from = InvalidPosition;
     game_state.move_to = InvalidPosition;
+    (*moving_piece).has_not_moved_yet = false;
 }
 
 void ChessGame::capture(BoardPosition by, BoardPosition at){

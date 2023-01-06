@@ -35,6 +35,14 @@ public:
     ChessColors color;
     PieceType type;
     LifeStatus status;
+
+    // bool has_moved_yet: Tracks if it has been moved.
+    // Not needed for bishop, queen and knight.
+    // It might be a good idea to inherit ChessPiece
+    // and create different classes for different type
+    // of pieces.
+    bool has_not_moved_yet;
+
     inline std::string get_color_str(){
         return color_name[(unsigned int) color];
     };
