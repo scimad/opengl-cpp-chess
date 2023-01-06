@@ -6,6 +6,8 @@
 
 #include "graphics/gui.hpp"
 
+#include <stack>
+
 class GameState{
 public:
     bool paused;
@@ -24,7 +26,18 @@ public:
 };
 
 class ChessTimer{};
-class GameHistory{};
+
+
+struct ChessMove
+{
+    BoardPosition from;
+    BoardPosition to;
+
+    // Are the following necessary to store? Not at all.
+    bool is_capture;
+    bool is_promotion;
+    bool is_castling;
+};
 
 class ChessGame{
 private:
@@ -46,9 +59,8 @@ public:
     void move(BoardPosition from, BoardPosition to);
     void capture(BoardPosition by, BoardPosition at);
     std::vector<BoardPosition> get_valid_moves(BoardPosition position);
-
+    std::stack<ChessMove> moves;
     // ChessTimer timer;
-    // GameHistory history;
     // bool can_castle[2]; //Can be indexed using LIGHT and DARK
 
 public:

@@ -55,6 +55,10 @@ public:
         return (BoardRank) (((int) pos) / 8 + 1);
     }
 
+    static inline BoardPosition get_position(BoardFile file, BoardRank rank){
+        return (BoardPosition) ((int) rank * 8 + file);
+    }
+
     static inline BoardPosition get_position_from_str(std::string pos_str){
         int index = 0;
         while (index <= 64){

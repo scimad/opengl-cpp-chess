@@ -138,7 +138,7 @@ void ChessGame::run(){
 }
 
 std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
-    ChessPiece* moving_piece = get_piece_at_position(from);
+    ChessPiece* current_piece = get_piece_at_position(from);
 
     unsigned int file_from = GameBoard::get_file(from);
     unsigned int rank_from = GameBoard::get_rank(from);
@@ -149,38 +149,62 @@ std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
     std::vector<BoardPosition> valid_moves;
 
     BoardPosition possible_to;
-    switch ((*moving_piece).type)   // (*moving_piece).
+    switch ((*current_piece).type)   // (*current_piece).
     {
     case PAWN:
         {
-            int direction = 1 - 2 * (int) (*moving_piece).color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+            int direction = 1 - 2 * (int) (*current_piece).color; //LIGHT moves in direction = 1, DARK moves in direction = -1
             // One step move rule
             possible_to = (BoardPosition) ((int) from + direction * 8);
-            valid_moves.push_back(possible_to);
-            // Two step move rule
-            if ((*moving_piece).has_not_moved_yet){
-                possible_to = (BoardPosition) ((int) from + direction * 16);
+            if (!get_piece_at_position(possible_to))
+            {
                 valid_moves.push_back(possible_to);
             }
+            // Two step move rule
+            if ((*current_piece).has_not_moved_yet){
+                possible_to = (BoardPosition) ((int) from + direction * 16);
+                BoardPosition one_rank_ahead = (BoardPosition) ((int) from + direction * 8);
+                if (!get_piece_at_position(possible_to) && !get_piece_at_position(one_rank_ahead))
+                {
+                    valid_moves.push_back(possible_to);
+                }
+            }
             // Capture rule
-            if (((*moving_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::H) || (((*moving_piece).color == DARK && GameBoard::get_file(from) != BoardFile::A))){
+            if (((*current_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::H) || (((*current_piece).color == DARK && GameBoard::get_file(from) != BoardFile::A))){
+                // Not the player's right most file
                 possible_to = (BoardPosition) ((int) from + direction * 8 + 1);
                 ChessPiece* target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
-                    if ((*target_piece).color != (*moving_piece).color)
+                    if ((*target_piece).color != (*current_piece).color)
                     valid_moves.push_back(possible_to);
+                }else if (((*current_piece).color == LIGHT && GameBoard::get_rank(from) == 5) || ((*current_piece).color == DARK && GameBoard::get_rank(from) == 4)){
+                    //En-passant rule
+                    ChessMove last_move = moves.top();
+                    if (((*(get_piece_at_position(last_move.to))).type == PAWN) && GameBoard::get_file(from) + direction == GameBoard::get_file(last_move.from) && ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)){
+                        valid_moves.push_back(possible_to);
+                    }
                 }
             }
 
-            if (((*moving_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::A) || (((*moving_piece).color == DARK && GameBoard::get_file(from) != BoardFile::H))){
+            if (((*current_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::A) || (((*current_piece).color == DARK && GameBoard::get_file(from) != BoardFile::H))){
+                // Not the player's left most file
                 possible_to = (BoardPosition) ((int) from + direction * 8 - 1);
                 ChessPiece* target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
-                    if ((*target_piece).color != (*moving_piece).color)
+                    if ((*target_piece).color != (*current_piece).color)
                     valid_moves.push_back(possible_to);
+                }else if (((*current_piece).color == LIGHT && GameBoard::get_rank(from) == 5) || ((*current_piece).color == DARK && GameBoard::get_rank(from) == 4)){
+                    //En-passant rule
+                    ChessMove last_move = moves.top();
+                    if (((*(get_piece_at_position(last_move.to))).type == PAWN) && GameBoard::get_file(from) - direction == GameBoard::get_file(last_move.from) && ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)){
+                        valid_moves.push_back(possible_to);
+                    }
                 }
             }
-            // En-passant rule
+            
+
+            
+
             // TODO: Contiune from here
             for (BoardPosition pos : valid_moves){
                 zr::log("Possible move: " + GameBoard::get_position_str(pos));
@@ -200,16 +224,22 @@ bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
 };
 
 void ChessGame::move(BoardPosition from, BoardPosition to){
-    ChessPiece* moving_piece = get_piece_at_position(from);
-    (*moving_piece).position = to;
+    ChessPiece* current_piece = get_piece_at_position(from);
+    (*current_piece).position = to;
     game_state.current_player = (ChessColors)(1-game_state.current_player); // Alternate between LIGHT and DARK
+    
+    // TODO : check if the move is a capture or promotion or castling
+    moves.push({from, to, false, false});
+    
+    // TODO: Implement pawn promotion
+
     game_state.move_from = InvalidPosition;
     game_state.move_to = InvalidPosition;
-    (*moving_piece).has_not_moved_yet = false;
+    (*current_piece).has_not_moved_yet = false;
 }
 
 void ChessGame::capture(BoardPosition by, BoardPosition at){
-    ChessPiece* moving_piece = get_piece_at_position(by);
+    ChessPiece* current_piece = get_piece_at_position(by);
     ChessPiece* captured_piece = get_piece_at_position(at);
     (*captured_piece).position = InvalidPosition;
     (*captured_piece).status = DEAD;
