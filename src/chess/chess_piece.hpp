@@ -4,11 +4,7 @@
 #include "graphics/model.hpp"
 
 #include "chess/game_board.hpp"
-
-typedef enum {
-    LIGHT = 0,
-    DARK = 1
-} ChessColors;
+#include "chess/common.hpp"
 
 typedef enum {
     PAWN,

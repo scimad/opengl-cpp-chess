@@ -1,9 +1,11 @@
 #ifndef __GAME_BOARD_HPP
 #define __GAME_BOARD_HPP
 
-#include "graphics/model.hpp"
 
 #include "glm/glm.hpp"
+
+#include "chess/common.hpp"
+#include "graphics/model.hpp"
 
 #include <string>
 
