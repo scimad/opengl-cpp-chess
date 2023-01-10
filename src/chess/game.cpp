@@ -169,7 +169,7 @@ std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
                     valid_moves.push_back(possible_to);
                 }
             }
-            // Capture rule
+            // Capture rule for Right diagonal of PAWN
             if (((*current_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::H) || (((*current_piece).color == DARK && GameBoard::get_file(from) != BoardFile::A))){
                 // Not the player's right most file
                 possible_to = (BoardPosition) ((int) from + direction * 8 + 1);
@@ -180,12 +180,13 @@ std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
                 }else if (((*current_piece).color == LIGHT && GameBoard::get_rank(from) == 5) || ((*current_piece).color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
                     ChessMove last_move = moves.top();
-                    if (((*(get_piece_at_position(last_move.to))).type == PAWN) && GameBoard::get_file(from) + direction == GameBoard::get_file(last_move.from) && ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)){
+                    if (((*(get_piece_at_position(last_move.to))).type == PAWN) && (BoardFile)(GameBoard::get_file(from) + direction) == GameBoard::get_file(last_move.from) && ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)){
                         valid_moves.push_back(possible_to);
                     }
                 }
             }
 
+            // Capture rule for Left diagonal of PAWN
             if (((*current_piece).color == LIGHT && GameBoard::get_file(from) != BoardFile::A) || (((*current_piece).color == DARK && GameBoard::get_file(from) != BoardFile::H))){
                 // Not the player's left most file
                 possible_to = (BoardPosition) ((int) from + direction * 8 - 1);
@@ -201,9 +202,6 @@ std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
                     }
                 }
             }
-            
-
-            
 
             // TODO: Contiune from here
             for (BoardPosition pos : valid_moves){
