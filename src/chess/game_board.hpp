@@ -140,7 +140,7 @@ public:
     static BoardPosition get_position_on_back_right(BoardPosition from, ChessColors player_color, int n_steps = 1)
     {
         int direction = 1 - 2 * (int)player_color; // LIGHT moves in direction = 1, DARK moves in direction = -1
-        return get_position((BoardFile)((int)GameBoard::get_file(from) - direction * n_steps), (BoardRank) ((int) GameBoard::get_rank(from) + direction * n_steps));
+        return get_position((BoardFile)((int)GameBoard::get_file(from) + direction * n_steps), (BoardRank) ((int) GameBoard::get_rank(from) - direction * n_steps));
     }
 
     static BoardPosition get_position_ahead(BoardPosition from, ChessColors player_color, int n_steps = 1)

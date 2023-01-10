@@ -208,95 +208,17 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
             }
         }
         break;
-
     case ROOK:
-    {
-        int n_moves;
-        // rook left
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_left(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+        {
+            int n_moves;
+            // rook left
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_left(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
                 }
-                break;
-            }
-        }
-
-        // rook right
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_right(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-
-        // rook ahead
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_ahead(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-
-        // rook back
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_back(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-    }
-    case KNIGHT:
-    {
-        for (unsigned int i = 0; i<8; i++){
-            int a = (pow(-1, i / 2)) * (pow(-1, i / 4))* (1 + i/4);
-            int b = (pow(-1, (i) % 2)) * (2 - i/4);
-            possible_to = GameBoard::get_position((BoardFile)((int) GameBoard::get_file(from) + a), (BoardRank)(int (GameBoard::get_rank(from) + b)));
-            if (possible_to != InvalidPosition){
-                zr::log("Possible position for knight at " + GameBoard::get_position_str(from) + ": " + GameBoard::get_position_str(possible_to));
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
                     valid_moves.push_back({from, possible_to, false, false, false, false});
@@ -304,91 +226,168 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                     if ((*target_piece).color == game_state.opponent_player){
                         valid_moves.push_back({from, possible_to, true, false, false, false});
                     }
+                    break;
+                }
+            }
+
+            // rook right
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_right(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
+            }
+
+            // rook ahead
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_ahead(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
+            }
+
+            // rook back
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_back(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
                 }
             }
         }
-    }
-
+        break;
+    case KNIGHT:
+        {
+            for (unsigned int i = 0; i<8; i++){
+                int a = (pow(-1, i / 2)) * (pow(-1, i / 4))* (1 + i/4);
+                int b = (pow(-1, (i) % 2)) * (2 - i/4);
+                possible_to = GameBoard::get_position((BoardFile)((int) GameBoard::get_file(from) + a), (BoardRank)(int (GameBoard::get_rank(from) + b)));
+                if (possible_to != InvalidPosition){
+                    target_piece = get_piece_at_position(possible_to);
+                    if (!target_piece){
+                        valid_moves.push_back({from, possible_to, false, false, false, false});
+                    }else{
+                        if ((*target_piece).color == game_state.opponent_player){
+                            valid_moves.push_back({from, possible_to, true, false, false, false});
+                        }
+                    }
+                }
+            }
+        }
+        break;
     case BISHOP:
-    {
-        int n_moves;
-        // bishop front left
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_front_left(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+        {
+            int n_moves;
+            // bishop front left
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_front_left(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
                 }
-                break;
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
+            }
+
+            // bishop front right
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_front_right(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
+            }
+
+            // bishop back left
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_back_left(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
+            }
+
+            // bishop back right
+            n_moves = 0;
+            while (true){
+                n_moves++;
+                possible_to = GameBoard::get_position_on_back_right(from, my_color, n_moves);
+                if (possible_to == InvalidPosition){
+                    break;
+                }
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                    break;
+                }
             }
         }
-
-        // bishop front right
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_front_right(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-
-        // bishop back left
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_back_left(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-
-        // bishop back right
-        n_moves = 0;
-        while (true){
-            n_moves++;
-            possible_to = GameBoard::get_position_on_back_right(from, my_color, n_moves);
-            if (possible_to == InvalidPosition){
-                break;
-            }
-            target_piece = get_piece_at_position(possible_to);
-            if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
-            }else{
-                if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
-                }
-                break;
-            }
-        }
-    }
-
+        break;
     default:
         break;
     }
