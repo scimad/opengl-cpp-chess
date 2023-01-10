@@ -12,7 +12,7 @@ class GameState{
 public:
     bool paused;
     bool is_checked;
-    ChessColors current_player;
+    ChessColors current_player, opponent_player;
     bool is_white_castled;
     bool is_black_castled;
     unsigned int total_moves_count;
@@ -21,6 +21,7 @@ public:
     BoardPosition selected_position;
     BoardPosition move_from;
     BoardPosition move_to;
+    const ChessPiece* last_moved_piece;
     GameState();
     ~GameState();
 };
@@ -37,6 +38,7 @@ struct ChessMove
     bool is_capture;
     bool is_promotion;
     bool is_castling;
+    bool is_en_passant;
 };
 
 class ChessGame{
@@ -58,7 +60,7 @@ public:
     bool is_legal_move(BoardPosition from, BoardPosition to);
     void move(BoardPosition from, BoardPosition to);
     void capture(BoardPosition by, BoardPosition at);
-    std::vector<BoardPosition> get_valid_moves(BoardPosition position);
+    std::vector<ChessMove> get_valid_moves(BoardPosition position);
     std::stack<ChessMove> moves;
     // ChessTimer timer;
     // bool can_castle[2]; //Can be indexed using LIGHT and DARK
