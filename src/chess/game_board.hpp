@@ -58,7 +58,10 @@ public:
     }
 
     static inline BoardPosition get_position(BoardFile file, BoardRank rank){
-        return (BoardPosition) ((int) rank * 8 + file);
+        if ((int) file >= BoardFile::A && (int) file <= BoardFile::H && (int) rank >= 1 && (int) file <= 8)
+            return (BoardPosition) ((int) rank * 8 + file);
+        else
+            return BoardPosition::InvalidPosition;
     }
 
     static inline BoardPosition get_position_from_str(std::string pos_str){
@@ -71,6 +74,27 @@ public:
         }
         return InvalidPosition;
     }
+
+    static BoardPosition get_position_on_right(BoardPosition from, ChessColors player_color, int n_steps){
+        int direction = 1 - 2 * (int) player_color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+        return  get_position((BoardFile) ((int) GameBoard::get_file(from) + direction*n_steps), GameBoard::get_rank(from));
+    }
+
+    static BoardPosition get_position_on_left(BoardPosition from, ChessColors player_color, int n_steps){
+        int direction = 1 - 2 * (int) player_color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+        return  get_position((BoardFile) ((int) GameBoard::get_file(from) - direction*n_steps), GameBoard::get_rank(from));
+    }
+
+    static BoardPosition get_position_ahead(BoardPosition from, ChessColors player_color, int n_steps){
+        int direction = 1 - 2 * (int) player_color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+        return  get_position(GameBoard::get_file(from), (BoardRank) ((int) GameBoard::get_rank(from) + direction*n_steps));
+    }
+
+    static BoardPosition get_position_back(BoardPosition from, ChessColors player_color, int n_steps){
+        int direction = 1 - 2 * (int) player_color; //LIGHT moves in direction = 1, DARK moves in direction = -1
+        return  get_position(GameBoard::get_file(from), (BoardRank) ((int) GameBoard::get_rank(from) - direction*n_steps));
+    }
+
 public:
     GameBoard(const std::string& shader_path, const std::string& texture_path);
     ~GameBoard();
