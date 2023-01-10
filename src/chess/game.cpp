@@ -83,12 +83,13 @@ void ChessGame::process_requests() {
 
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
+                std::vector<BoardPosition> move_target = get_valid_moves(position);
                 if (game_state.current_player == (*selected_piece).color){  // Choosing a piece to move
                     zr::log("Player " + (*selected_piece).get_color_str() +
                             ": Move my " + board.get_position_str(position) +
                             " " + (*selected_piece).get_name_str() + ".");
                     game_state.move_from = position;
-                    get_valid_moves(position);
+                    // TODO: highlight valid moves
                 }
                 else
                 {
@@ -216,8 +217,14 @@ std::vector<BoardPosition> ChessGame::get_valid_moves(BoardPosition from){
 }
 
 bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
-    bool is_move_valid = true;
-    // TODO: WRITE LEGAL MOVE LOGIC
+    bool is_move_valid = false;
+    std::vector<BoardPosition> valid_move_targets = get_valid_moves(from);
+    for (auto& target : valid_move_targets){
+        if (target == to){
+            is_move_valid = true;
+            break;
+        }
+    }
     return is_move_valid;
 };
 
