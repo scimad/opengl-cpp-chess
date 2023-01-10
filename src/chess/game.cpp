@@ -3,6 +3,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include<math.h>
 #include<string>
 #include<memory>
 
@@ -80,7 +81,6 @@ void ChessGame::process_requests() {
                 zr::log("Game timer started.");
                 // TODO: Start ChessTimer
             }
-
             ChessPiece* selected_piece = get_piece_at_position(position);
             if (selected_piece != nullptr){
                 std::vector<ChessMove> move_target = get_valid_moves(position);
@@ -90,9 +90,7 @@ void ChessGame::process_requests() {
                             " " + (*selected_piece).get_name_str() + ".");
                     game_state.move_from = position;
                     // TODO: highlight valid moves
-                }
-                else
-                {
+                }else{
                     if (game_state.move_from != InvalidPosition){ // Make capture
                         zr::log("Capture " + board.get_position_str(position) +
                                 " " + (*selected_piece).get_color_str() +
@@ -291,7 +289,25 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
             }
         }
     }
-
+    case KNIGHT:
+    {
+        for (unsigned int i = 0; i<8; i++){
+            int a = (pow(-1, i / 2)) * (pow(-1, i / 4))* (1 + i/4);
+            int b = (pow(-1, (i) % 2)) * (2 - i/4);
+            possible_to = GameBoard::get_position((BoardFile)((int) GameBoard::get_file(from) + a), (BoardRank)(int (GameBoard::get_rank(from) + b)));
+            if (possible_to != InvalidPosition){
+                zr::log("Possible position for knight at " + GameBoard::get_position_str(from) + ": " + GameBoard::get_position_str(possible_to));
+                target_piece = get_piece_at_position(possible_to);
+                if (!target_piece){
+                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                }else{
+                    if ((*target_piece).color == game_state.opponent_player){
+                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                    }
+                }
+            }
+        }
+    }
     default:
         break;
     }
