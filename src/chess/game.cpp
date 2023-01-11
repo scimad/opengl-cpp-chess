@@ -658,7 +658,7 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         break;
     }
 
-    // check if any move leaves their own king in checkcheck if any move leaves their own king in check
+    // TODO: check if any move leaves their own king in checkcheck if any move leaves their own king in check
 
     return valid_moves;
 }
@@ -712,9 +712,8 @@ void ChessGame::move(ChessMove requested_move){
         default:
             break;
     }
-    // TODO : check if the move is en-passant or promotion or castling
+    // TODO : check if the move is promotion or castling
     // TODO: Implement pawn promotion
-    // TODO: Implement en-passant capture
     // TODO: Implement check validation capture
 
     game_state.move_from = InvalidPosition;
