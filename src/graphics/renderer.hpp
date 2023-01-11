@@ -15,8 +15,6 @@
 
 class Texture;
 class Shader;
-class Drawable;
-
 
 class Renderer{
 public:

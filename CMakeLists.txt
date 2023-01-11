@@ -42,6 +42,7 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/graphics/model.cpp
 
     src/chess/common.cpp
+    src/chess/game_state.cpp
     src/chess/game.cpp
     src/chess/chess_piece.cpp
     src/chess/game_board.cpp

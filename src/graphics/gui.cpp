@@ -1,10 +1,9 @@
 #include "graphics/gui.hpp"
 
+#include "graphics/model.hpp"
 #include "graphics/utils.hpp"
 #include "chess/chess_piece.hpp"
 #include "chess/game_board.hpp"
-
-#include "chess/game.hpp"
 
 #include "ZR/core.hpp"
 
@@ -17,6 +16,7 @@ GLui::GLui(/* args */):exit_flag(false)
 {
     setup_opengl();
     init_opengl();
+    square = std::make_unique<DrawableModel>("../res/basic.shader", "../assets/box.png");
 }
 
 GLui::~GLui()
@@ -193,8 +193,9 @@ int GLui::init_opengl(){
     return 0;
 }
 
-int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board){
-        /* Render here || Make the draw calls here || Draw the models here*/
+int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board, const GameState& game_state){
+    /* Render here || Make the draw calls here || Draw the models here*/
+
     // Render board
     {
         glm::mat4 model = glm::scale(glm::mat4(1.0), glm::vec3((float) board.board_width / (float) board.square_length));
@@ -204,7 +205,7 @@ int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameB
         // Binding is handled inside setUniform
         // shader.setUniform1i("u_texture", 0);
         (*board.shader_ptr).setUniformMat4f("u_MVP", mvp);
-        (*board.shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
+        (*board.shader_ptr).setUniform4f("u_highlight_color", 0.0, 0.0, 0.0, 0.0); //if uniform is not used in shader, it gives error / notification
         renderer.draw(board);
     }
 
@@ -216,15 +217,43 @@ int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameB
 
             // Binding is handled inside setUniform
             // shader.setUniform1i("u_texture", 0);
+
+            // highlight selected
+            // if (game_state.selected_position == (*piece).position){
+            //     (*piece).shader_ptr = std::make_unique<Shader>("/home/scimad/Desktop/OpenGL-CPP-Chess/res/selected.shader");
+            // }else{
+            //     (*piece).shader_ptr = std::make_unique<Shader>("/home/scimad/Desktop/OpenGL-CPP-Chess/res/light.shader");
+            //}
             (*(*piece).shader_ptr).setUniformMat4f("u_MVP", mvp);
-            (*(*piece).shader_ptr).setUniform4f("u_color", 0.2, 0.3, 0.4, 0.0); //if uniform is not used in shader, it gives error / notification
+
+            int square_type = 0;
+            glm::vec4 rgba(0.0, 0.0, 0.0, 1.0);
+            if (game_state.selected_position == (*piece).position){
+                square_type = SquareType::SELECTED;
+                rgba = glm::vec4(0.3, 0.3, 0.6, 1.0);
+            }
+            (*(*piece).shader_ptr).setUniform1i("square_type", square_type); //if uniform is not used in shader, it gives error / notification
+            (*(*piece).shader_ptr).setUniform4f("u_highlight_color", rgba.x, rgba.y, rgba.z, rgba.w); //if uniform is not used in shader, it gives error / notification
+
+
             renderer.draw((*piece));
         }
     }
 
     //Render anything else
     {
+        // Render highlighted squares
+        for (auto& moves : game_state.possible_moves){
+            glm::mat4 model = glm::translate(glm::mat4(1.0),  board.get_translation_from_position(moves.to));
+            glm::mat4 mvp = proj * view * model;
 
+            (*(*square).shader_ptr).setUniformMat4f("u_MVP", mvp);
+            int square_type = SquareType::VALID_EMPTY_SQUARE;
+            glm::vec4 rgba(1.0, 1.0, 1.0, 0.8);
+            (*(*square).shader_ptr).setUniform1i("square_type", square_type); //if uniform is not used in shader, it gives error / notification
+            (*(*square).shader_ptr).setUniform4f("u_highlight_color", rgba.x, rgba.y, rgba.z, rgba.w); //if uniform is not used in shader, it gives error / notification
+            renderer.draw(*square);
+        }
     }
 
     /* Swap front and back buffers */

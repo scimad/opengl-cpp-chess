@@ -1,45 +1,15 @@
+
 #ifndef __GAME_HPP
 #define __GAME_HPP
 
+#include "chess/common.hpp"
+#include "chess/game_state.hpp"
 #include "chess/game_board.hpp"
 #include "chess/chess_piece.hpp"
 
 #include "graphics/gui.hpp"
 
 #include <stack>
-
-class GameState{
-public:
-    bool paused;
-    bool is_checked;
-    ChessColors current_player, opponent_player;
-    bool is_white_castled;
-    bool is_black_castled;
-    unsigned int total_moves_count;
-    unsigned int irreversible_moves_count;
-    unsigned int repeated_moves_count;
-    BoardPosition selected_position;
-    BoardPosition move_from;
-    BoardPosition move_to;
-    const ChessPiece* last_moved_piece;
-    GameState();
-    ~GameState();
-};
-
-class ChessTimer{};
-
-
-struct ChessMove
-{
-    BoardPosition from;
-    BoardPosition to;
-
-    // Are the following necessary to store? Not at all.
-    bool is_capture;
-    bool is_promotion;
-    bool is_castling;
-    bool is_en_passant;
-};
 
 class ChessGame{
 private:
@@ -55,6 +25,7 @@ public:
     
     std::vector<ChessPiece*> pieces;        // Can we do std::vector<ChessPiece> pieces; instead?
     GameBoard board;
+    DrawableModel square;
     bool touch_to_move_rule;
     GameState game_state;
     bool is_legal_move(BoardPosition from, BoardPosition to);

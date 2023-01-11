@@ -7,6 +7,7 @@
 #include "graphics/utils.hpp"
 #include "graphics/renderer.hpp"
 
+#include "chess/game_state.hpp"
 #include "chess/chess_piece.hpp"
 #include "chess/game_board.hpp"
 
@@ -38,6 +39,9 @@ private:
     Color clear_color;
 
     bool is_window_resizable;
+
+    // DrawableModel square;//("../res/basic.shader", "../assets/box.png");
+    std::unique_ptr<DrawableModel> square;
 
     // window coordinate system: 0,0 on top left
     double cursor_xpos_wrt_window, cursor_ypos_wrt_window;
@@ -85,9 +89,6 @@ public:
 
     glm::vec2 transform_xy_window_to_board(const GameBoard& board, glm::vec2 window_xy);
 
-
-    
-
     // The following matrices perform the described transformation:
     // model        => 3D model's coordinate (in object's coordinate system) to world coordidnate system
     // view         => world coordinates to camera / view coordinate system
@@ -100,7 +101,7 @@ public:
     ~GLui();
     int setup_opengl(); // setup opengl stuffs
     int init_opengl();  // init opengl stuffs
-    int redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board);  //redraw opengl stuffs
+    int redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameBoard& board, const GameState& game_state);  //redraw opengl stuffs
 
 };
 
