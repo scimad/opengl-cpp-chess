@@ -102,18 +102,21 @@ void ChessGame::process_requests() {
                             capture(game_state.move_from, game_state.move_to);
                         }
                     }
+                    game_state.possible_moves.clear();
                 }
             }else{
                 if (game_state.move_from != InvalidPosition){ // Make move
-                    zr::log("Move to empty square " + board.get_position_str(position) + ".");
+                    zr::log("Move to empty square " + board.get_position_str(position) + ".", zr::DEBUG);
                     game_state.move_to = position;
                     if (is_legal_move(game_state.move_from, game_state.move_to)){
                         move(game_state.move_from, game_state.move_to);
                     }
                 }
+                game_state.possible_moves.clear();
             }
         }else{
             game_state.move_from = InvalidPosition;
+            game_state.possible_moves.clear();
         }
     }
     glui.button_actions_queue.clear();
@@ -162,7 +165,7 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
             possible_to = (BoardPosition) ((int) from + direction * 8);
             if (!get_piece_at_position(possible_to))
             {
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE });
             }
             // Two step move rule
             if (not_moved_yet){
@@ -170,7 +173,7 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 BoardPosition one_rank_ahead = (BoardPosition) ((int) from + direction * 8);
                 if (!get_piece_at_position(possible_to) && !get_piece_at_position(one_rank_ahead))
                 {
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }
             }
             // Capture rule for Right diagonal of PAWN
@@ -180,13 +183,13 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
                     if ((*target_piece).color != my_color)
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
                     ChessMove last_move = moves.top();
                     // ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)
                     if (((*game_state.last_moved_piece).type == PAWN) && (BoardFile)(GameBoard::get_file(from) + direction) == GameBoard::get_file(last_move.from) &&  last_move.to == GameBoard::get_position_ahead(last_move.from, game_state.opponent_player, 2)){
-                        valid_moves.push_back({from, possible_to, true, false, false, true});
+                        valid_moves.push_back({from, possible_to, SquareType::EN_PASSANT_CAPTURE});
                     }
                 }
             }
@@ -198,12 +201,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
                     if ((*target_piece).color != my_color)
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
                     ChessMove last_move = moves.top();
                     if (((*game_state.last_moved_piece).type == PAWN) && GameBoard::get_file(GameBoard::get_position_on_left(from, my_color))== GameBoard::get_file(last_move.from) &&  last_move.to == GameBoard::get_position_ahead(last_move.from, game_state.opponent_player, 2)){
-                        valid_moves.push_back({from, possible_to, false, false, false, true});
+                        valid_moves.push_back({from, possible_to, SquareType::EN_PASSANT_CAPTURE});
                     }
                 }
             }
@@ -222,10 +225,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -241,10 +244,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -260,10 +263,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -280,10 +283,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 target_piece = get_piece_at_position(possible_to);
 
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -299,10 +302,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 if (possible_to != InvalidPosition){
                     target_piece = get_piece_at_position(possible_to);
                     if (!target_piece){
-                        valid_moves.push_back({from, possible_to, false, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                     }else{
                         if ((*target_piece).color == game_state.opponent_player){
-                            valid_moves.push_back({from, possible_to, true, false, false, false});
+                            valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                         }
                     }
                 }
@@ -322,10 +325,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -341,10 +344,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -360,10 +363,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -379,10 +382,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -403,10 +406,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -422,10 +425,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -441,10 +444,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -460,10 +463,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -482,10 +485,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -501,10 +504,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -520,10 +523,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 }
                 target_piece = get_piece_at_position(possible_to);
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -540,10 +543,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
                 target_piece = get_piece_at_position(possible_to);
 
                 if (!target_piece){
-                    valid_moves.push_back({from, possible_to, false, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, true, false, false, false});
+                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                     }
                     break;
                 }
@@ -558,10 +561,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -570,10 +573,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -582,10 +585,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -594,10 +597,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -606,10 +609,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -618,10 +621,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -630,10 +633,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -642,10 +645,10 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
         if (possible_to != InvalidPosition){
             target_piece = get_piece_at_position(possible_to);
             if (!target_piece){
-                valid_moves.push_back({from, possible_to, false, false, false, false});
+                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
             }else{
                 if ((*target_piece).color == game_state.opponent_player){
-                    valid_moves.push_back({from, possible_to, true, false, false, false});
+                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
                 }
             }
         }
@@ -653,12 +656,15 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
     default:
         break;
     }
+
+    // check if any move leaves their own king in checkcheck if any move leaves their own king in check
+
     return valid_moves;
 }
 
 bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
     bool is_move_valid = false;
-    game_state.possible_moves = get_valid_moves(from);
+    // game_state.possible_moves = get_valid_moves(from);
     for (auto& target : game_state.possible_moves){
         if (target.to == to){
             is_move_valid = true;
@@ -675,12 +681,14 @@ void ChessGame::move(BoardPosition from, BoardPosition to){
     game_state.opponent_player = game_state.current_player;
     game_state.current_player = (ChessColors)(1-game_state.current_player);
     
-    // TODO : check if the move is a capture or promotion or castling
-    moves.push({from, to, false, false, false, false});
+    // save history of moves. // moves.push({from, to, SquareType::VALID_EMPTY_SQUARE});
+
+    // TODO : check if the move is an_passant or promotion or castling
     
     // TODO: Implement pawn promotion
 
     // TODO: Implement en-passant capture
+    // TODO: Implement check validation capture
 
     game_state.move_from = InvalidPosition;
     game_state.move_to = InvalidPosition;

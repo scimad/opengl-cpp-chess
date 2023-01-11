@@ -38,26 +38,22 @@ typedef enum {
 
 class ChessTimer{};
 
-
+enum SquareType
+{
+    SELECTED = 1,
+    VALID_EMPTY_SQUARE,
+    NORMAL_CAPTURE,
+    EN_PASSANT_CAPTURE,
+    KING_CHECKED,
+    KING_CASTLE,
+    PAWN_PROMOTED
+};
 struct ChessMove
 {
     BoardPosition from;
     BoardPosition to;
 
-    // Are the following necessary to store? Not at all.
-    bool is_capture;
-    bool is_promotion;
-    bool is_castling;
-    bool is_en_passant;
-};
-
-enum SquareType
-{
-    SELECTED = 1,
-    VALID_EMPTY_SQUARE,
-    VALID_CAPTURE,
-    KING_CHECKED,
-    KING_CASTLE
+    SquareType square_type_at_to;
 };
 
 
