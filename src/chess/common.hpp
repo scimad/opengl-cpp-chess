@@ -40,6 +40,7 @@ class ChessTimer{};
 
 enum SquareType
 {
+    ILLEGAL = -1,
     SELECTED = 1,
     VALID_EMPTY_SQUARE,
     NORMAL_CAPTURE,

@@ -28,9 +28,9 @@ public:
     DrawableModel square;
     bool touch_to_move_rule;
     GameState game_state;
-    bool is_legal_move(BoardPosition from, BoardPosition to);
-    void move(BoardPosition from, BoardPosition to);
-    void capture(BoardPosition by, BoardPosition at);
+    ChessMove is_legal_move(BoardPosition from, BoardPosition to);
+    void move(ChessMove requested_move);
+    void capture(ChessMove capturing_move);
     std::vector<ChessMove> get_valid_moves(BoardPosition position);
     std::stack<ChessMove> moves;
     // ChessTimer timer;

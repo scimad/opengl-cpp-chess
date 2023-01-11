@@ -97,9 +97,9 @@ void ChessGame::process_requests() {
                 }else{
                     if (game_state.move_from != InvalidPosition){ // Make capture
                         game_state.move_to = position;
-                        if (is_legal_move(game_state.move_from, game_state.move_to)){
-                            //TODO implement make move
-                            capture(game_state.move_from, game_state.move_to);
+                        ChessMove this_move = is_legal_move(game_state.move_from, game_state.move_to);
+                        if (this_move.square_type_at_to != ILLEGAL){
+                            move(this_move);
                         }
                     }
                     game_state.possible_moves.clear();
@@ -108,8 +108,9 @@ void ChessGame::process_requests() {
                 if (game_state.move_from != InvalidPosition){ // Make move
                     zr::log("Move to empty square " + board.get_position_str(position) + ".", zr::DEBUG);
                     game_state.move_to = position;
-                    if (is_legal_move(game_state.move_from, game_state.move_to)){
-                        move(game_state.move_from, game_state.move_to);
+                    ChessMove this_move = is_legal_move(game_state.move_from, game_state.move_to);
+                    if (this_move.square_type_at_to != ILLEGAL){
+                        move(this_move);
                     }
                 }
                 game_state.possible_moves.clear();
@@ -662,31 +663,57 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
     return valid_moves;
 }
 
-bool ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
-    bool is_move_valid = false;
+ChessMove ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
+    ChessMove is_move_valid = {InvalidPosition, InvalidPosition, ILLEGAL};
+
     // game_state.possible_moves = get_valid_moves(from);
-    for (auto& target : game_state.possible_moves){
-        if (target.to == to){
-            is_move_valid = true;
+    for (auto& valid_moves : game_state.possible_moves){
+        if (valid_moves.to == to){
+            is_move_valid = valid_moves;
             break;
         }
     }
     return is_move_valid;
 };
 
-void ChessGame::move(BoardPosition from, BoardPosition to){
+void ChessGame::move(ChessMove requested_move){
+    // BoardPosition from, BoardPosition to){
+    BoardPosition from = requested_move.from;
+    BoardPosition to = requested_move.to;
+    SquareType move_type = requested_move.square_type_at_to;
     ChessPiece* current_piece = get_piece_at_position(from);
-    (*current_piece).position = to;
-    // Alternate between LIGHT and DARK
-    game_state.opponent_player = game_state.current_player;
-    game_state.current_player = (ChessColors)(1-game_state.current_player);
-    
-    // save history of moves. // moves.push({from, to, SquareType::VALID_EMPTY_SQUARE});
 
-    // TODO : check if the move is an_passant or promotion or castling
-    
+    switch (requested_move.square_type_at_to){
+        case VALID_EMPTY_SQUARE:
+        {
+            (*current_piece).position = to;
+        }
+            break;
+        case NORMAL_CAPTURE:
+        {
+            ChessPiece* captured_piece = get_piece_at_position(to);
+            (*captured_piece).position = InvalidPosition;
+            (*captured_piece).status = DEAD;
+            (*current_piece).position = to;
+        }
+            break;
+        case EN_PASSANT_CAPTURE:
+        {
+            ChessPiece* captured_piece = get_piece_at_position(GameBoard::get_position_back(to, game_state.current_player));
+            (*captured_piece).position = InvalidPosition;
+            (*captured_piece).status = DEAD;
+            (*current_piece).position = to;
+        }
+            break;
+        case KING_CASTLE:
+            break;
+        case PAWN_PROMOTED:
+            break;
+        default:
+            break;
+    }
+    // TODO : check if the move is en-passant or promotion or castling
     // TODO: Implement pawn promotion
-
     // TODO: Implement en-passant capture
     // TODO: Implement check validation capture
 
@@ -696,12 +723,14 @@ void ChessGame::move(BoardPosition from, BoardPosition to){
     game_state.last_moved_piece = current_piece;
     game_state.selected_position = InvalidPosition;
     game_state.possible_moves.clear();
+
+    // save history of moves.
+    moves.push(requested_move);
+
+    // Alternate between LIGHT and DARK
+    game_state.opponent_player = game_state.current_player;
+    game_state.current_player = (ChessColors)(1-game_state.current_player);
 }
 
-void ChessGame::capture(BoardPosition by, BoardPosition at){
-    ChessPiece* current_piece = get_piece_at_position(by);
-    ChessPiece* captured_piece = get_piece_at_position(at);
-    (*captured_piece).position = InvalidPosition;
-    (*captured_piece).status = DEAD;
-    move(by, at);
+void ChessGame::capture(ChessMove capturing_move){
 };
