@@ -18,6 +18,7 @@ private:
         return color_names[chess_color];
     };
     ChessPiece* get_piece_at_position(BoardPosition position);
+    bool does_this_move_leave_me_in_check(ChessMove move);
 
 public:
     GLui glui;

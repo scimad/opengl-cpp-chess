@@ -21,6 +21,14 @@ typedef enum {
 } LifeStatus;
 
 
+struct PieceState{
+    BoardPosition position;
+    ChessColors color;
+    PieceType type;
+    LifeStatus status;
+    bool has_not_moved_yet;
+};
+
 class ChessPiece : public DrawableModel{
 private:
     inline static const std::vector<std::string> piece_name = {"PAWN", "ROOK", "KNIGHT", "BISHOP", "QUEEN", "KING"};

@@ -657,23 +657,70 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
     default:
         break;
     }
-
-    // TODO: check if any move leaves their own king in checkcheck if any move leaves their own king in check
-
     return valid_moves;
 }
 
-ChessMove ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
-    ChessMove is_move_valid = {InvalidPosition, InvalidPosition, ILLEGAL};
+bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
+    bool will_be_check = false;
+    std::vector<PieceState> current_piece_states;
+    GameState current_game_state = game_state;
+    for (ChessPiece* piece : pieces){
+        current_piece_states.push_back({(*piece).position, (*piece).color, (*piece).type, (*piece).status, (*piece).has_not_moved_yet});
+    }
 
-    // game_state.possible_moves = get_valid_moves(from);
-    for (auto& valid_moves : game_state.possible_moves){
-        if (valid_moves.to == to){
-            is_move_valid = valid_moves;
-            break;
+    // TODO: Make sure everything affected by following move is undone later
+    ChessGame::move(move);
+
+    BoardPosition my_kings_position;
+    for (ChessPiece* piece : pieces){
+        if ((*piece).color == game_state.opponent_player && (*piece).type == KING){
+            my_kings_position = (*piece).position;
         }
     }
-    return is_move_valid;
+    for (ChessPiece* piece : pieces){
+        if (piece->color == game_state.current_player){
+            std::vector<ChessMove> future_moves = get_valid_moves((*piece).position);
+            for (ChessMove future_move : future_moves){
+                zr::log("AWARE: " + GameBoard::get_position_str(piece->position) + " " +
+                  piece->get_color_str() + " " + piece->get_name_str() + " could move to " +
+                  GameBoard::get_position_str(future_move.to) + ".", zr::VERBOSITY_LEVEL::DEBUG);
+                if  (future_move.to == my_kings_position){
+                    will_be_check = true;
+                    zr::log("INVALID: WOULD BE A CHECK!");
+                }
+            }
+        }
+    }
+
+    // Revert state
+    for (size_t i = 0; i< pieces.size(); ++i){
+        pieces[i]->position = current_piece_states[i].position;
+        pieces[i]->color = current_piece_states[i].color;
+        pieces[i]->type = current_piece_states[i].type;
+        pieces[i]->status = current_piece_states[i].status;
+        pieces[i]->has_not_moved_yet = current_piece_states[i].has_not_moved_yet;
+    }
+
+    game_state = current_game_state;
+
+    return will_be_check;
+}
+
+ChessMove ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
+    ChessMove is_move_legal = {InvalidPosition, InvalidPosition, ILLEGAL};
+
+    // game_state.possible_moves = get_valid_moves(from);
+    for (auto& valid_move : game_state.possible_moves){
+        bool is_check = false;
+        if (valid_move.to == to){
+            is_check |= does_this_move_leave_me_in_check(valid_move);
+            if (is_check == false){
+                is_move_legal = valid_move;
+                break;
+            }
+        }
+    }
+    return is_move_legal;
 };
 
 void ChessGame::move(ChessMove requested_move){
