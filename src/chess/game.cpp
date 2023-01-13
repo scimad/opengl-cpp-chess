@@ -140,7 +140,7 @@ void ChessGame::run(){
     zr::log("OpenGL environment terminating gracefully.");
 }
 
-std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
+std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check_for_checks){
     ChessPiece* current_piece = get_piece_at_position(from);
 
     unsigned int file_from = GameBoard::get_file(from);
@@ -657,7 +657,23 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from){
     default:
         break;
     }
+
+    if (check_for_checks)
+    {
+
+        std::vector<ChessMove> legal_moves;
+        for (auto& valid_move : valid_moves){
+            ChessMove is_move_legal = {InvalidPosition, InvalidPosition, ILLEGAL};
+            bool is_check = does_this_move_leave_me_in_check(valid_move);
+            if (is_check == false){
+                legal_moves.push_back(valid_move);
+            }
+        }
+        valid_moves = legal_moves;
+    }
+
     return valid_moves;
+
 }
 
 bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
@@ -679,14 +695,14 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
     }
     for (ChessPiece* piece : pieces){
         if (piece->color == game_state.current_player){
-            std::vector<ChessMove> future_moves = get_valid_moves((*piece).position);
+            std::vector<ChessMove> future_moves = get_valid_moves((*piece).position, false);
             for (ChessMove future_move : future_moves){
                 zr::log("AWARE: " + GameBoard::get_position_str(piece->position) + " " +
                   piece->get_color_str() + " " + piece->get_name_str() + " could move to " +
                   GameBoard::get_position_str(future_move.to) + ".", zr::VERBOSITY_LEVEL::DEBUG);
                 if  (future_move.to == my_kings_position){
                     will_be_check = true;
-                    zr::log("INVALID: WOULD BE A CHECK!");
+                    zr::log( GameBoard::get_position_str(future_move.to) + " is invalid move. Would be a 'check'!");
                 }
             }
         }

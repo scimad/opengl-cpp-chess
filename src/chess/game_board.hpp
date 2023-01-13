@@ -30,6 +30,8 @@ public:
 
     static inline std::string get_position_str(BoardPosition pos)
     {
+        if (pos > H8 || pos < A1)
+            pos = InvalidPosition;
         return pos_string[pos];
     }
 

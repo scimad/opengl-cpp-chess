@@ -32,7 +32,7 @@ public:
     ChessMove is_legal_move(BoardPosition from, BoardPosition to);
     void move(ChessMove requested_move);
     void capture(ChessMove capturing_move);
-    std::vector<ChessMove> get_valid_moves(BoardPosition position);
+    std::vector<ChessMove> get_valid_moves(BoardPosition position, bool check_for_checks = true);
     std::stack<ChessMove> moves;
     // ChessTimer timer;
     // bool can_castle[2]; //Can be indexed using LIGHT and DARK
