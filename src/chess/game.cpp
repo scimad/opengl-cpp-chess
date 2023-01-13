@@ -685,7 +685,7 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
     }
 
     // TODO: Make sure everything affected by following move is undone later
-    ChessGame::move(move);
+    ChessGame::move(move, false);
 
     BoardPosition my_kings_position;
     for (ChessPiece* piece : pieces){
@@ -697,12 +697,8 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
         if (piece->color == game_state.current_player){
             std::vector<ChessMove> future_moves = get_valid_moves((*piece).position, false);
             for (ChessMove future_move : future_moves){
-                zr::log("AWARE: " + GameBoard::get_position_str(piece->position) + " " +
-                  piece->get_color_str() + " " + piece->get_name_str() + " could move to " +
-                  GameBoard::get_position_str(future_move.to) + ".", zr::VERBOSITY_LEVEL::DEBUG);
                 if  (future_move.to == my_kings_position){
                     will_be_check = true;
-                    zr::log( GameBoard::get_position_str(future_move.to) + " is invalid move. Would be a 'check'!");
                 }
             }
         }
@@ -739,7 +735,7 @@ ChessMove ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
     return is_move_legal;
 };
 
-void ChessGame::move(ChessMove requested_move){
+void ChessGame::move(ChessMove requested_move, bool is_real_move){
     // BoardPosition from, BoardPosition to){
     BoardPosition from = requested_move.from;
     BoardPosition to = requested_move.to;
@@ -792,6 +788,22 @@ void ChessGame::move(ChessMove requested_move){
     // Alternate between LIGHT and DARK
     game_state.opponent_player = game_state.current_player;
     game_state.current_player = (ChessColors)(1-game_state.current_player);
+
+    if (is_real_move){
+        zr::log("Now I want to see if checkmate!");
+        bool is_checkmate = true;
+        for (ChessPiece* piece : pieces){
+            if (piece->color == game_state.current_player && piece->status == ALIVE){;
+                is_checkmate &= (get_valid_moves(piece->position, true).size() == 0);
+                if (!is_checkmate){
+                    break;
+                }
+            }
+        }
+        if (is_checkmate){
+            zr::log("Checkmate!");
+        }
+    }
 }
 
 void ChessGame::capture(ChessMove capturing_move){

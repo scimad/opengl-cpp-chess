@@ -30,7 +30,7 @@ public:
     bool touch_to_move_rule;
     GameState game_state;
     ChessMove is_legal_move(BoardPosition from, BoardPosition to);
-    void move(ChessMove requested_move);
+    void move(ChessMove requested_move, bool is_real_move=true);
     void capture(ChessMove capturing_move);
     std::vector<ChessMove> get_valid_moves(BoardPosition position, bool check_for_checks = true);
     std::stack<ChessMove> moves;

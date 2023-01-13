@@ -6,7 +6,8 @@ ChessPiece::ChessPiece(const std::string& shader_path, const std::string& textur
         color(color),
         type(type),
         position(board_position),
-        has_not_moved_yet(true)
+        has_not_moved_yet(true),
+        status(ALIVE)
 {
 
 }
