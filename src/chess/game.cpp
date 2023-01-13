@@ -73,7 +73,6 @@ void ChessGame::process_requests() {
         BoardPosition position = board.get_board_position_from_xy(board_xy);
         game_state.selected_position = position;
 
-        // TODO: Continue gameplay by checking game_state
         if (position != BoardPosition::InvalidPosition){
             // start game
             if (game_state.paused == true){
@@ -93,7 +92,6 @@ void ChessGame::process_requests() {
                     for (ChessMove move : game_state.possible_moves){
                         zr::log("Valid move: " + GameBoard::get_position_str(move.to), zr::VERBOSITY_LEVEL::INFO);
                     }
-                    // TODO: highlight valid moves
                 }else{
                     if (game_state.move_from != InvalidPosition){ // Make capture
                         game_state.move_to = position;
@@ -684,7 +682,6 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
         current_piece_states.push_back({(*piece).position, (*piece).color, (*piece).type, (*piece).status, (*piece).has_not_moved_yet});
     }
 
-    // TODO: Make sure everything affected by following move is undone later
     ChessGame::move(move, false);
 
     BoardPosition my_kings_position;
@@ -773,7 +770,6 @@ void ChessGame::move(ChessMove requested_move, bool is_real_move){
     }
     // TODO : check if the move is promotion or castling
     // TODO: Implement pawn promotion
-    // TODO: Implement check validation capture
 
     game_state.move_from = InvalidPosition;
     game_state.move_to = InvalidPosition;
