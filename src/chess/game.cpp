@@ -97,7 +97,7 @@ void ChessGame::process_requests() {
                         game_state.move_to = position;
                         ChessMove this_move = is_legal_move(game_state.move_from, game_state.move_to);
                         if (this_move.square_type_at_to != ILLEGAL){
-                            move(this_move);
+                            make_move(this_move);
                         }
                     }
                     game_state.possible_moves.clear();
@@ -108,7 +108,7 @@ void ChessGame::process_requests() {
                     game_state.move_to = position;
                     ChessMove this_move = is_legal_move(game_state.move_from, game_state.move_to);
                     if (this_move.square_type_at_to != ILLEGAL){
-                        move(this_move);
+                        make_move(this_move);
                     }
                 }
                 game_state.possible_moves.clear();
@@ -554,7 +554,7 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
         break;
     
     case KING:
-        
+
         // left
         possible_to = GameBoard::get_position_on_left(from, my_color);
         if (possible_to != InvalidPosition){
@@ -682,7 +682,7 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
         current_piece_states.push_back({(*piece).position, (*piece).color, (*piece).type, (*piece).status, (*piece).has_not_moved_yet});
     }
 
-    ChessGame::move(move, false);
+    ChessGame::make_move(move, false);
 
     BoardPosition my_kings_position;
     for (ChessPiece* piece : pieces){
@@ -732,7 +732,7 @@ ChessMove ChessGame::is_legal_move(BoardPosition from, BoardPosition to){
     return is_move_legal;
 };
 
-void ChessGame::move(ChessMove requested_move, bool is_real_move){
+void ChessGame::make_move(ChessMove requested_move, bool is_real_move){
     // BoardPosition from, BoardPosition to){
     BoardPosition from = requested_move.from;
     BoardPosition to = requested_move.to;
