@@ -35,23 +35,19 @@ private:
     inline static const std::vector<std::string> color_name = {"LIGHT", "DARK"};
 public:
     ChessPiece(const std::string& shader_path, const std::string& texture_path, ChessColors color, PieceType type, BoardPosition board_position = InvalidPosition);
-    BoardPosition position;
-    ChessColors color;
-    PieceType type;
-    LifeStatus status;
+    PieceState state;
 
-    // bool has_moved_yet: Tracks if it has been moved.
-    // Not needed for bishop, queen and knight.
-    // It might be a good idea to inherit ChessPiece
-    // and create different classes for different type
-    // of pieces.
-    bool has_not_moved_yet;
+    BoardPosition& position = state.position;
+    ChessColors& color = state.color;
+    PieceType& type = state.type;
+    LifeStatus& status = state.status;
+    bool& has_not_moved_yet = state.has_not_moved_yet;
 
     inline std::string get_color_str(){
-        return color_name[(unsigned int) color];
+        return color_name[(unsigned int) state.color];
     };
     inline std::string get_name_str(){
-        return piece_name[(unsigned int) type];
+        return piece_name[(unsigned int) state.type];
     };
 
     ~ChessPiece();

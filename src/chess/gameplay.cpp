@@ -83,7 +83,7 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
     std::vector<PieceState> current_piece_states;
     GameState current_game_state = game_state;
     for (ChessPiece* piece : pieces){
-        current_piece_states.push_back({(*piece).position, (*piece).color, (*piece).type, (*piece).status, (*piece).has_not_moved_yet});
+        current_piece_states.push_back((*piece).state);
     }
 
     // Simulate the move
@@ -110,11 +110,7 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
 
     // Revert state
     for (size_t i = 0; i< pieces.size(); ++i){
-        pieces[i]->position = current_piece_states[i].position;
-        pieces[i]->color = current_piece_states[i].color;
-        pieces[i]->type = current_piece_states[i].type;
-        pieces[i]->status = current_piece_states[i].status;
-        pieces[i]->has_not_moved_yet = current_piece_states[i].has_not_moved_yet;
+        (*pieces[i]).state = current_piece_states[i];
     }
 
     game_state = current_game_state;

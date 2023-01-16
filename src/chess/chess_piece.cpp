@@ -2,12 +2,7 @@
 #include "ZR/core.hpp"
 
 ChessPiece::ChessPiece(const std::string& shader_path, const std::string& texture_path, ChessColors color, PieceType type, BoardPosition board_position)
-    :   DrawableModel(shader_path, texture_path),
-        color(color),
-        type(type),
-        position(board_position),
-        has_not_moved_yet(true),
-        status(ALIVE)
+    :   DrawableModel(shader_path, texture_path), state({board_position, color, type, ALIVE, true})
 {
 
 }
