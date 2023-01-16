@@ -181,8 +181,14 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                 possible_to = (BoardPosition) ((int) from + direction * 8 + direction);
                 target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
-                    if ((*target_piece).color != my_color)
-                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                    if ((*target_piece).color == game_state.opponent_player){
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
+                    }
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
                     ChessMove last_move = moves.top();
@@ -199,8 +205,14 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                 possible_to = (BoardPosition) ((int) from + direction * 8 - direction);
                 target_piece = get_piece_at_position(possible_to);
                 if (target_piece){
-                    if ((*target_piece).color != my_color)
-                    valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                    if ((*target_piece).color == game_state.opponent_player){
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
+                    }
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
                     ChessMove last_move = moves.top();
@@ -227,7 +239,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -246,7 +263,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -265,7 +287,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -285,7 +312,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -304,7 +336,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                         valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                     }else{
                         if ((*target_piece).color == game_state.opponent_player){
-                            valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                            SquareType movetype = SquareType::NORMAL_CAPTURE;
+                            if ((*target_piece).type == KING){
+                                movetype = SquareType::KING_CHECKED;
+                                zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                            }
+                            valid_moves.push_back({from, possible_to, movetype});
                         }
                     }
                 }
@@ -327,7 +364,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -346,7 +388,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -365,7 +412,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -384,14 +436,19 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
             }
         }
         break;
-    
+
     case QUEEN:
         {
             int n_moves;
@@ -408,7 +465,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -427,7 +489,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -446,7 +513,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -465,7 +537,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -487,7 +564,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -506,7 +588,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -525,7 +612,12 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
@@ -545,16 +637,21 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                     valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE});
                 }else{
                     if ((*target_piece).color == game_state.opponent_player){
-                        valid_moves.push_back({from, possible_to, SquareType::NORMAL_CAPTURE});
+                        SquareType movetype = SquareType::NORMAL_CAPTURE;
+                        if ((*target_piece).type == KING){
+                            movetype = SquareType::KING_CHECKED;
+                            zr::log("Can give a check at " + GameBoard::get_position_str(possible_to));
+                        }
+                        valid_moves.push_back({from, possible_to, movetype});
                     }
                     break;
                 }
             }
         }
         break;
-    
-    case KING:
 
+    case KING:
+    {
         // left
         possible_to = GameBoard::get_position_on_left(from, my_color);
         if (possible_to != InvalidPosition){
@@ -651,6 +748,7 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
                 }
             }
         }
+    }
         break;
     default:
         break;
@@ -658,7 +756,6 @@ std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check
 
     if (check_for_checks)
     {
-
         std::vector<ChessMove> legal_moves;
         for (auto& valid_move : valid_moves){
             ChessMove is_move_legal = {InvalidPosition, InvalidPosition, ILLEGAL};
@@ -771,10 +868,11 @@ void ChessGame::make_move(ChessMove requested_move, bool is_real_move){
     // TODO : check if the move is promotion or castling
     // TODO: Implement pawn promotion
 
-    game_state.move_from = InvalidPosition;
-    game_state.move_to = InvalidPosition;
     (*current_piece).has_not_moved_yet = false;
     game_state.last_moved_piece = current_piece;
+
+    game_state.move_from = InvalidPosition;
+    game_state.move_to = InvalidPosition;
     game_state.selected_position = InvalidPosition;
     game_state.possible_moves.clear();
 
@@ -787,10 +885,12 @@ void ChessGame::make_move(ChessMove requested_move, bool is_real_move){
 
     if (is_real_move){
         zr::log("Now I want to see if checkmate!");
+
         bool is_checkmate = true;
         for (ChessPiece* piece : pieces){
             if (piece->color == game_state.current_player && piece->status == ALIVE){;
                 is_checkmate &= (get_valid_moves(piece->position, true).size() == 0);
+
                 if (!is_checkmate){
                     break;
                 }

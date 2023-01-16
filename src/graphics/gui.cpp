@@ -256,6 +256,29 @@ int GLui::redraw_gl_contents(const std::vector<ChessPiece*>& pieces, const GameB
         }
     }
 
+    {  
+        // Render pawn promotion pieces if needed
+
+    }
+
+    {  
+        // Render check square in red
+        if (game_state.is_checked == true){
+            glm::mat4 model = glm::translate(glm::mat4(1.0),  board.get_translation_from_position(E8));
+            glm::mat4 mvp = proj * view * model;
+            (*(*square).shader_ptr).setUniformMat4f("u_MVP", mvp);
+            glm::vec4 rgba(0.8, 0.1, 0.1, 0.8);
+            (*(*square).shader_ptr).setUniform1i("square_type", SquareType::KING_CHECKED); //if uniform is not used in shader, it gives error / notification
+            (*(*square).shader_ptr).setUniform4f("u_highlight_color", rgba.x, rgba.y, rgba.z, rgba.w); //if uniform is not used in shader, it gives error / notification
+            renderer.draw(*square);
+        }
+    }
+
+    {  
+        // Render castle square in purple
+
+    }
+
     /* Swap front and back buffers */
     glfwSwapBuffers(gui_window);
     renderer.clear();

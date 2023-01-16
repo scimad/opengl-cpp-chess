@@ -38,10 +38,10 @@ void main(){
         color = vec4(0.0, 0.8, 0.0, 0.25);
     } else if (square_type == 3) { // capturing square
         color = vec4(1.0, 0, 0, 1.0);
-    } else if (square_type == 4) { // check square
+    } else if (square_type == 4) { // castling square
         color = vec4(1.0, 0, 0, 1.0);
-    } else if (square_type == 5) { // castling square
-        color = vec4(1.0, 0, 0, 1.0);
+    } else if (square_type == 5) { // check square
+        color = vec4(0.9, 0.0, 0.0, 0.6);
     }
 
 };
