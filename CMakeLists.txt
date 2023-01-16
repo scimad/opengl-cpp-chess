@@ -46,6 +46,8 @@ target_sources(opengl-chess PRIVATE main.cpp
     src/chess/game.cpp
     src/chess/chess_piece.cpp
     src/chess/game_board.cpp
+    src/chess/rules.cpp
+    src/chess/gameplay.cpp
 
     vendor/src/ZR/core.cpp
     vendor/include/imgui/imgui.cpp

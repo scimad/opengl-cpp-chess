@@ -19,6 +19,7 @@ private:
     };
     ChessPiece* get_piece_at_position(BoardPosition position);
     bool does_this_move_leave_me_in_check(ChessMove move);
+    bool is_check_for(ChessColors player);
 
 public:
     GLui glui;
@@ -31,7 +32,8 @@ public:
     GameState game_state;
     ChessMove is_legal_move(BoardPosition from, BoardPosition to);
     void make_move(ChessMove requested_move, bool is_real_move=true);
-    void capture(ChessMove capturing_move);
+    // void capture(ChessMove capturing_move);
+    std::vector<ChessMove> get_raw_valid_moves(BoardPosition position);
     std::vector<ChessMove> get_valid_moves(BoardPosition position, bool check_for_checks = true);
     std::stack<ChessMove> moves;
     // ChessTimer timer;
