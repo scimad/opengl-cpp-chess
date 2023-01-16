@@ -18,8 +18,9 @@ private:
         return color_names[chess_color];
     };
     ChessPiece* get_piece_at_position(BoardPosition position);
-    bool does_this_move_leave_me_in_check(ChessMove move);
     bool is_check_for(ChessColors player);
+    bool does_this_move_leave_me_in_check(ChessMove move);
+    bool check_for_checkmate();
 
 public:
     GLui glui;
@@ -31,7 +32,7 @@ public:
     bool touch_to_move_rule;
     GameState game_state;
     ChessMove is_legal_move(BoardPosition from, BoardPosition to);
-    void make_move(ChessMove requested_move, bool is_real_move=true);
+    void make_move(ChessMove requested_move);
     // void capture(ChessMove capturing_move);
     std::vector<ChessMove> get_raw_valid_moves(BoardPosition position);
     std::vector<ChessMove> get_legal_moves(BoardPosition position);
