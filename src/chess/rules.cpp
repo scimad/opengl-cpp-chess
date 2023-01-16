@@ -6,7 +6,7 @@
 #include<memory>
 
 std::vector<ChessMove> ChessGame::get_raw_valid_moves(BoardPosition from){
-        ChessPiece* current_piece = get_piece_at_position(from);
+    ChessPiece* current_piece = get_piece_at_position(from);
 
     unsigned int file_from = GameBoard::get_file(from);
     unsigned int rank_from = GameBoard::get_rank(from);

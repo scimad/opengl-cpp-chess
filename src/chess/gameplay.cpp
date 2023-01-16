@@ -26,7 +26,7 @@ void ChessGame::process_requests() {
                             ": Move my " + board.get_position_str(position) +
                             " " + (*selected_piece).get_name_str() + ".", zr::VERBOSITY_LEVEL::DEBUG);
                     game_state.move_from = position;
-                    game_state.possible_moves = get_valid_moves(position);
+                    game_state.possible_moves = get_legal_moves(position);
                     for (ChessMove move : game_state.possible_moves){
                         zr::log("Valid move: " + GameBoard::get_position_str(move.to), zr::VERBOSITY_LEVEL::DEBUG);
                     }
@@ -59,23 +59,18 @@ void ChessGame::process_requests() {
     glui.button_actions_queue.clear();
 }
 
-std::vector<ChessMove> ChessGame::get_valid_moves(BoardPosition from, bool check_for_checks){
+std::vector<ChessMove> ChessGame::get_legal_moves(BoardPosition from){
     auto valid_moves = get_raw_valid_moves(from);
 
-    if (check_for_checks)
-    {
-        std::vector<ChessMove> legal_moves;
-        for (auto& valid_move : valid_moves){
-            ChessMove is_move_legal = {InvalidPosition, InvalidPosition, ILLEGAL};
-            bool is_check = does_this_move_leave_me_in_check(valid_move);
-            if (is_check == false){
-                legal_moves.push_back(valid_move);
-            }
+    std::vector<ChessMove> legal_moves;
+    for (auto& valid_move : valid_moves){
+        ChessMove is_move_legal = {InvalidPosition, InvalidPosition, ILLEGAL};
+        bool is_check = does_this_move_leave_me_in_check(valid_move);
+        if (is_check == false){
+            legal_moves.push_back(valid_move);
         }
-        valid_moves = legal_moves;
     }
-
-    return valid_moves;
+    return legal_moves;
 
 }
 
@@ -101,7 +96,7 @@ bool ChessGame::does_this_move_leave_me_in_check(ChessMove move){
     }
     for (ChessPiece* piece : pieces){
         if (piece->color == game_state.current_player){
-            std::vector<ChessMove> future_moves = get_valid_moves((*piece).position, false);
+            std::vector<ChessMove> future_moves = get_raw_valid_moves((*piece).position);
             for (ChessMove future_move : future_moves){
                 if  (future_move.to == my_kings_position){
                     will_be_check = true;
@@ -201,7 +196,7 @@ void ChessGame::make_move(ChessMove requested_move, bool is_real_move){
         bool is_checkmate = true;
         for (ChessPiece* piece : pieces){
             if (piece->color == game_state.current_player && piece->status == ALIVE){;
-                is_checkmate &= (get_valid_moves(piece->position, true).size() == 0);
+                is_checkmate &= (get_legal_moves(piece->position).size() == 0);
                 if (!is_checkmate){
                     break;
                 }

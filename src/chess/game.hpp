@@ -34,7 +34,7 @@ public:
     void make_move(ChessMove requested_move, bool is_real_move=true);
     // void capture(ChessMove capturing_move);
     std::vector<ChessMove> get_raw_valid_moves(BoardPosition position);
-    std::vector<ChessMove> get_valid_moves(BoardPosition position, bool check_for_checks = true);
+    std::vector<ChessMove> get_legal_moves(BoardPosition position);
     std::stack<ChessMove> moves;
     // ChessTimer timer;
     // bool can_castle[2]; //Can be indexed using LIGHT and DARK
