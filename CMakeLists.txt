@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 project(opengl-chess LANGUAGES C CXX)
 
 add_executable(opengl-chess)
+add_executable(socket-test)
+
 find_package(PkgConfig REQUIRED)
 
 set(OpenGL_GL_PREFERENCE GLVND)
@@ -21,6 +23,7 @@ if(${glfw3_FOUND})
 endif()
 
 target_compile_features(opengl-chess PRIVATE cxx_std_17)
+target_compile_features(socket-test PRIVATE cxx_std_17)
 
 include_directories(src/
                     vendor/include
@@ -28,6 +31,10 @@ include_directories(src/
                     ${OPENGL_INCLUDE_DIRS}
                     ${glfw3_INCLUDE_DIRS}
 )                                 # ${GLEW_INCLUDE_DIRS}
+
+target_sources(socket-test PRIVATE socket-client.cpp)
+
+target_link_libraries(socket-test ${OPENGL_LIBRARIES} ${glfw3_LINK_LIBRARIES} GLEW ${CMAKE_DL_LIBS})
 
 target_sources(opengl-chess PRIVATE main.cpp 
     src/graphics/utils.cpp
