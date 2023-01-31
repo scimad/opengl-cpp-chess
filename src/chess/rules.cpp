@@ -31,7 +31,12 @@ std::vector<ChessMove> ChessGame::get_raw_valid_moves(BoardPosition from){
             possible_to = (BoardPosition) ((int) from + direction * 8);
             if (!get_piece_at_position(possible_to))
             {
-                valid_moves.push_back({from, possible_to, SquareType::VALID_EMPTY_SQUARE });
+                SquareType movetype = SquareType::VALID_EMPTY_SQUARE;
+                if ((my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 8) or (my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 1)){
+                    movetype = SquareType::PAWN_PROMOTED;
+                    zr::log("Pawn could get promoted!");
+                }
+                valid_moves.push_back({from, possible_to, movetype});
             }
             // Two step move rule
             if (not_moved_yet){
@@ -54,10 +59,15 @@ std::vector<ChessMove> ChessGame::get_raw_valid_moves(BoardPosition from){
                             movetype = SquareType::KING_CHECKED;
                             // zr::log("1 Can give a check at " + GameBoard::get_position_str(possible_to) + " from " + GameBoard::get_position_str(from));
                         }
+                        if ((my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 8) or (my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 1)){
+                            movetype = SquareType::PAWN_PROMOTED;
+                            zr::log("Pawn could get promoted!");
+                        }
                         valid_moves.push_back({from, possible_to, movetype});
                     }
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
+                    zr::log("Could be en-passant");
                     ChessMove last_move = moves.top();
                     // ((int) GameBoard::get_rank(last_move.from) - (int) GameBoard::get_rank(last_move.to) == 2 * direction)
                     if (((*game_state.last_moved_piece).type == PAWN) && (BoardFile)(GameBoard::get_file(from) + direction) == GameBoard::get_file(last_move.from) &&  last_move.to == GameBoard::get_position_ahead(last_move.from, game_state.opponent_player, 2)){
@@ -78,10 +88,15 @@ std::vector<ChessMove> ChessGame::get_raw_valid_moves(BoardPosition from){
                             movetype = SquareType::KING_CHECKED;
                             // zr::log("2 Can give a check at " + GameBoard::get_position_str(possible_to) + " from " + GameBoard::get_position_str(from));
                         }
+                        if ((my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 8) or (my_color == ChessColors::LIGHT and GameBoard::get_rank(possible_to) == 1)){
+                            movetype = SquareType::PAWN_PROMOTED;
+                            zr::log("Pawn could get promoted!");
+                        }
                         valid_moves.push_back({from, possible_to, movetype});
                     }
                 }else if ((my_color == LIGHT && GameBoard::get_rank(from) == 5) || (my_color == DARK && GameBoard::get_rank(from) == 4)){
                     //En-passant rule
+                    zr::log("Could be en-passant");
                     ChessMove last_move = moves.top();
                     if (((*game_state.last_moved_piece).type == PAWN) && GameBoard::get_file(GameBoard::get_position_on_left(from, my_color))== GameBoard::get_file(last_move.from) &&  last_move.to == GameBoard::get_position_ahead(last_move.from, game_state.opponent_player, 2)){
                         valid_moves.push_back({from, possible_to, SquareType::EN_PASSANT_CAPTURE});
